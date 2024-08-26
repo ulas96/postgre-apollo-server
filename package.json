@@ -1,0 +1,23 @@
+{
+  "name": "postgre-apollo-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "watch": "tsc -w",
+    "start": "nodemon dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tsconfig.json": "^1.0.11",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "apollo-server": "^3.13.0",
+    "graphql": "^16.9.0",
+    "nexus": "^1.3.0",
+    "nodemon": "^3.1.4"
+  }
+}

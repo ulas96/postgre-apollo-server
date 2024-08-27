@@ -41,6 +41,7 @@ export interface NexusGenObjects {
     parsedData: string[]; // [String!]!
     transactionHash: string; // String!
   }
+  Mutation: {};
   Query: {};
 }
 
@@ -68,6 +69,9 @@ export interface NexusGenFieldTypes {
     parsedData: string[]; // [String!]!
     transactionHash: string; // String!
   }
+  Mutation: { // field return type
+    createEvent: NexusGenRootTypes['Event']; // Event!
+  }
   Query: { // field return type
     events: NexusGenRootTypes['Event'][]; // [Event!]!
   }
@@ -87,12 +91,30 @@ export interface NexusGenFieldTypeNames {
     parsedData: 'String'
     transactionHash: 'String'
   }
+  Mutation: { // field return type name
+    createEvent: 'Event'
+  }
   Query: { // field return type name
     events: 'Event'
   }
 }
 
 export interface NexusGenArgTypes {
+  Mutation: {
+    createEvent: { // args
+      appName: string; // String!
+      blockNumber: number; // Int!
+      contractAddress: string; // String!
+      createdAt: string; // String!
+      eventData: string; // String!
+      eventName: string; // String!
+      eventSignature: string; // String!
+      id: number; // Int!
+      logIndex: number; // Int!
+      parsedData: string[]; // [String!]!
+      transactionHash: string; // String!
+    }
+  }
 }
 
 export interface NexusGenAbstractTypeMembers {

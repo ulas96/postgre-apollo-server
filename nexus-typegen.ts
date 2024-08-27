@@ -28,6 +28,19 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  Event: { // root type
+    appName: string; // String!
+    blockNumber: number; // Int!
+    contractAddress: string; // String!
+    createdAt: string; // String!
+    eventData: string; // String!
+    eventName: string; // String!
+    eventSignature: string; // String!
+    id: number; // Int!
+    logIndex: number; // Int!
+    parsedData: string[]; // [String!]!
+    transactionHash: string; // String!
+  }
   Query: {};
 }
 
@@ -42,14 +55,40 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  Event: { // field return type
+    appName: string; // String!
+    blockNumber: number; // Int!
+    contractAddress: string; // String!
+    createdAt: string; // String!
+    eventData: string; // String!
+    eventName: string; // String!
+    eventSignature: string; // String!
+    id: number; // Int!
+    logIndex: number; // Int!
+    parsedData: string[]; // [String!]!
+    transactionHash: string; // String!
+  }
   Query: { // field return type
-    ok: boolean; // Boolean!
+    events: NexusGenRootTypes['Event'][]; // [Event!]!
   }
 }
 
 export interface NexusGenFieldTypeNames {
+  Event: { // field return type name
+    appName: 'String'
+    blockNumber: 'Int'
+    contractAddress: 'String'
+    createdAt: 'String'
+    eventData: 'String'
+    eventName: 'String'
+    eventSignature: 'String'
+    id: 'Int'
+    logIndex: 'Int'
+    parsedData: 'String'
+    transactionHash: 'String'
+  }
   Query: { // field return type name
-    ok: 'Boolean'
+    events: 'Event'
   }
 }
 

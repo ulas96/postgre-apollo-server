@@ -46,6 +46,11 @@ export interface NexusGenObjects {
     walletAddress?: string | null; // String
   }
   Mutation: {};
+  PoolDeposits: { // root type
+    poolAddress: string; // String!
+    totalDeposits: string; // String!
+    walletAddress: string; // String!
+  }
   Query: {};
 }
 
@@ -80,9 +85,15 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     createEvent: NexusGenRootTypes['Event']; // Event!
   }
+  PoolDeposits: { // field return type
+    poolAddress: string; // String!
+    totalDeposits: string; // String!
+    walletAddress: string; // String!
+  }
   Query: { // field return type
     events: NexusGenRootTypes['Event'][]; // [Event!]!
     mintedTokens: Array<NexusGenRootTypes['MintedTokens'] | null>; // [MintedTokens]!
+    poolDeposits: NexusGenRootTypes['PoolDeposits'][]; // [PoolDeposits!]!
   }
 }
 
@@ -107,9 +118,15 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     createEvent: 'Event'
   }
+  PoolDeposits: { // field return type name
+    poolAddress: 'String'
+    totalDeposits: 'String'
+    walletAddress: 'String'
+  }
   Query: { // field return type name
     events: 'Event'
     mintedTokens: 'MintedTokens'
+    poolDeposits: 'PoolDeposits'
   }
 }
 

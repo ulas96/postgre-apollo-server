@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateEventMutation = exports.MintedTokensQuery = exports.EventsQuery = exports.MintedTokensType = exports.EventType = void 0;
+exports.CreateEventMutation = exports.PoolDepositsQuery = exports.MintedTokensQuery = exports.EventsQuery = exports.PoolDepositsType = exports.MintedTokensType = exports.EventType = void 0;
 const nexus_1 = require("nexus");
 const Event_1 = require("../entities/Event");
 exports.EventType = (0, nexus_1.objectType)({
@@ -25,6 +25,14 @@ exports.MintedTokensType = (0, nexus_1.objectType)({
         t.string("walletAddress");
         t.string("totalMinted");
     },
+});
+exports.PoolDepositsType = (0, nexus_1.objectType)({
+    name: "PoolDeposits",
+    definition(t) {
+        t.nonNull.string("walletAddress");
+        t.nonNull.string("poolAddress");
+        t.nonNull.string("totalDeposits");
+    }
 });
 exports.EventsQuery = (0, nexus_1.extendType)({
     type: "Query",
@@ -59,6 +67,31 @@ exports.MintedTokensQuery = (0, nexus_1.extendType)({
             },
         });
     },
+});
+exports.PoolDepositsQuery = (0, nexus_1.extendType)({
+    type: "Query",
+    definition(t) {
+        t.nonNull.list.nonNull.field("poolDeposits", {
+            type: "PoolDeposits",
+            async resolve(_parent, _args, context, _info) {
+                const { connection } = context;
+                const query = `
+                    SELECT 
+                        "parsedData"[2] as "poolAddress",
+                        "parsedData"[1] as "walletAddress",
+                        SUM(CAST("parsedData"[3] AS DECIMAL(65,0)))::TEXT as "totalDeposits"
+                    FROM event
+                    WHERE 
+                        "eventName" = 'Transfer' AND
+                        "parsedData"[1] != '0x0000000000000000000000000000000000000000'
+                    GROUP BY "parsedData"[2], "parsedData"[1]
+                `;
+                const result = await connection.query(query);
+                console.log('Pool Deposits Query Result:', result);
+                return result;
+            }
+        });
+    }
 });
 exports.CreateEventMutation = (0, nexus_1.extendType)({
     type: "Mutation",

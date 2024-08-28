@@ -23,26 +23,19 @@ export const EventType = objectType({
 export const MintedTokensType = objectType({
     name: "MintedTokens",
     definition(t) {
-      t.string("walletAddress");  // Changed to nullable
-      t.string("totalMinted");    // Keep this nullable as well
+      t.string("walletAddress");  
+      t.string("totalMinted");  
     },
   });
 
-// let events: NexusGenObjects["Event"][] = [   
-// {
-//     id: 5,
-//     eventName: "Transfer",
-//     eventSignature: "Transfer(address,address,uint256)",
-//     eventData: "0x000000000000000000000000000000000000000000000000f35f5ed172de40d8",
-//     blockNumber: 46942706,
-//     transactionHash: "0x3fe53ecc1828a472e9763d97c68d29673a41326e33d58911d62f5f0a4c20ba88",
-//     logIndex: 29,
-//     parsedData: ["0x0000000000000000000000000000000000000000","0xF1102711b8df5EA6f934cb42F618ed040d0d5da6","17536839727672344792"],
-//     contractAddress: "0xaBe7a9dFDA35230ff60D1590a929aE0644c47DC1",
-//     appName: "ausd-event-tracker",
-//     createdAt: "2024-08-26 11:44:24.271592"
-// }
-// ]; 
+export const PoolDepositsType = objectType({
+    name: "PoolDeposits",
+    definition(t) {
+        t.nonNull.string("walletAddress");
+        t.nonNull.string("poolAddress");
+        t.nonNull.string("totalDeposits");
+    }
+})
 
 export const EventsQuery = extendType({
     type: "Query",
@@ -79,6 +72,32 @@ export const MintedTokensQuery = extendType({
       });
     },
   });
+
+  export const PoolDepositsQuery = extendType({
+    type: "Query",
+    definition(t) {
+        t.nonNull.list.nonNull.field("poolDeposits", {
+            type: "PoolDeposits",
+            async resolve(_parent, _args, context: Context, _info) {
+                const { connection } = context;
+                const query = `
+                    SELECT 
+                        "parsedData"[2] as "poolAddress",
+                        "parsedData"[1] as "walletAddress",
+                        SUM(CAST("parsedData"[3] AS DECIMAL(65,0)))::TEXT as "totalDeposits"
+                    FROM event
+                    WHERE 
+                        "eventName" = 'Transfer' AND
+                        "parsedData"[1] != '0x0000000000000000000000000000000000000000'
+                    GROUP BY "parsedData"[2], "parsedData"[1]
+                `;
+                const result = await connection.query(query);
+                console.log('Pool Deposits Query Result:', result);
+                return result;
+            }
+        })
+    }
+});
 
 export const CreateEventMutation = extendType({
     type: "Mutation",

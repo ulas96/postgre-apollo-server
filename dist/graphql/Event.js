@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateEventMutation = exports.EventsQuery = exports.EventType = void 0;
+exports.CreateEventMutation = exports.MintedTokensQuery = exports.EventsQuery = exports.MintedTokensType = exports.EventType = void 0;
 const nexus_1 = require("nexus");
 const Event_1 = require("../entities/Event");
 exports.EventType = (0, nexus_1.objectType)({
@@ -19,6 +19,13 @@ exports.EventType = (0, nexus_1.objectType)({
             t.nonNull.string("createdAt");
     }
 });
+exports.MintedTokensType = (0, nexus_1.objectType)({
+    name: "MintedTokens",
+    definition(t) {
+        t.string("walletAddress");
+        t.string("totalMinted");
+    },
+});
 exports.EventsQuery = (0, nexus_1.extendType)({
     type: "Query",
     definition(t) {
@@ -30,6 +37,28 @@ exports.EventsQuery = (0, nexus_1.extendType)({
             }
         });
     }
+});
+exports.MintedTokensQuery = (0, nexus_1.extendType)({
+    type: "Query",
+    definition(t) {
+        t.nonNull.list.field("mintedTokens", {
+            type: "MintedTokens",
+            resolve(_parent, _args, context, _info) {
+                const { connection } = context;
+                const query = `
+            SELECT 
+              "parsedData"[2] as "walletAddress",
+              SUM(CAST("parsedData"[3] AS DECIMAL(65,0)))::TEXT as "totalMinted"
+            FROM event
+            WHERE 
+              "eventName" = 'Transfer' AND
+              "parsedData"[1] = '0x0000000000000000000000000000000000000000'
+            GROUP BY "parsedData"[2]
+          `;
+                return connection.query(query);
+            },
+        });
+    },
 });
 exports.CreateEventMutation = (0, nexus_1.extendType)({
     type: "Mutation",

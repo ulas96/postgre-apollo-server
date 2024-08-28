@@ -16,10 +16,16 @@ type Event {
   transactionHash: String!
 }
 
+type MintedTokens {
+  totalMinted: String
+  walletAddress: String
+}
+
 type Mutation {
   createEvent(appName: String!, blockNumber: Int!, contractAddress: String!, createdAt: String!, eventData: String!, eventName: String!, eventSignature: String!, id: Int!, logIndex: Int!, parsedData: [String!]!, transactionHash: String!): Event!
 }
 
 type Query {
   events: [Event!]!
+  mintedTokens: [MintedTokens]!
 }

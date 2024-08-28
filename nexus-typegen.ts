@@ -41,6 +41,10 @@ export interface NexusGenObjects {
     parsedData: string[]; // [String!]!
     transactionHash: string; // String!
   }
+  MintedTokens: { // root type
+    totalMinted?: string | null; // String
+    walletAddress?: string | null; // String
+  }
   Mutation: {};
   Query: {};
 }
@@ -69,11 +73,16 @@ export interface NexusGenFieldTypes {
     parsedData: string[]; // [String!]!
     transactionHash: string; // String!
   }
+  MintedTokens: { // field return type
+    totalMinted: string | null; // String
+    walletAddress: string | null; // String
+  }
   Mutation: { // field return type
     createEvent: NexusGenRootTypes['Event']; // Event!
   }
   Query: { // field return type
     events: NexusGenRootTypes['Event'][]; // [Event!]!
+    mintedTokens: Array<NexusGenRootTypes['MintedTokens'] | null>; // [MintedTokens]!
   }
 }
 
@@ -91,11 +100,16 @@ export interface NexusGenFieldTypeNames {
     parsedData: 'String'
     transactionHash: 'String'
   }
+  MintedTokens: { // field return type name
+    totalMinted: 'String'
+    walletAddress: 'String'
+  }
   Mutation: { // field return type name
     createEvent: 'Event'
   }
   Query: { // field return type name
     events: 'Event'
+    mintedTokens: 'MintedTokens'
   }
 }
 

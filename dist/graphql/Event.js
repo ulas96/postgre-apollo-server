@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateEventMutation = exports.PoolDepositsQuery = exports.MintedTokensQuery = exports.EventsQuery = exports.PoolDepositsType = exports.MintedTokensType = exports.EventType = void 0;
+exports.CreateEventMutation = exports.PoolUnlocksQuery = exports.PoolDepositsQuery = exports.MintedTokensQuery = exports.EventsQuery = exports.PoolUnlockType = exports.PoolDepositType = exports.MintedTokensType = exports.EventType = void 0;
 const nexus_1 = require("nexus");
 const Event_1 = require("../entities/Event");
 exports.EventType = (0, nexus_1.objectType)({
@@ -26,12 +26,20 @@ exports.MintedTokensType = (0, nexus_1.objectType)({
         t.string("totalMinted");
     },
 });
-exports.PoolDepositsType = (0, nexus_1.objectType)({
-    name: "PoolDeposits",
+exports.PoolDepositType = (0, nexus_1.objectType)({
+    name: "PoolDeposit",
     definition(t) {
         t.nonNull.string("walletAddress");
         t.nonNull.string("poolAddress");
         t.nonNull.string("totalDeposits");
+    }
+});
+exports.PoolUnlockType = (0, nexus_1.objectType)({
+    name: "PoolUnlock",
+    definition(t) {
+        t.nonNull.string("walletAddress");
+        t.nonNull.string("poolAddress");
+        t.string("totalUnlocks");
     }
 });
 exports.EventsQuery = (0, nexus_1.extendType)({
@@ -72,7 +80,7 @@ exports.PoolDepositsQuery = (0, nexus_1.extendType)({
     type: "Query",
     definition(t) {
         t.nonNull.list.nonNull.field("poolDeposits", {
-            type: "PoolDeposits",
+            type: "PoolDeposit",
             async resolve(_parent, _args, context, _info) {
                 const { connection } = context;
                 const query = `
@@ -82,12 +90,43 @@ exports.PoolDepositsQuery = (0, nexus_1.extendType)({
                         SUM(CAST("parsedData"[3] AS DECIMAL(65,0)))::TEXT as "totalDeposits"
                     FROM event
                     WHERE 
-                        "eventName" = 'Transfer' AND
+                        "parsedData"[1] = '0x934cf521743903D27e388d7E8517c636f3Cc4D54' OR
+                        "parsedData"[1] = '0x1a66208180c20cc893ac5092d0cce95994cb1ae0' OR
+                        "parsedData"[1] = '0x0363a3deBe776de575C36F524b7877dB7dd461Db' AND
                         "parsedData"[1] != '0x0000000000000000000000000000000000000000'
+
                     GROUP BY "parsedData"[2], "parsedData"[1]
                 `;
                 const result = await connection.query(query);
                 console.log('Pool Deposits Query Result:', result);
+                return result;
+            }
+        });
+    }
+});
+exports.PoolUnlocksQuery = (0, nexus_1.extendType)({
+    type: "Query",
+    definition(t) {
+        t.nonNull.list.nonNull.field("poolUnlocks", {
+            type: "PoolUnlock",
+            async resolve(_parent, _args, context, _info) {
+                const { connection } = context;
+                const query = `
+                    SELECT 
+                        "parsedData"[2] as "poolAddress",
+                        "parsedData"[1] as "walletAddress",
+                        SUM(CAST("parsedData"[3] AS DECIMAL(65,0)))::TEXT as "totalUnlocks"
+                    FROM event
+                    WHERE 
+                        "parsedData"[2] = '0x934cf521743903D27e388d7E8517c636f3Cc4D54' OR
+                        "parsedData"[2] = '0x1a66208180c20cc893ac5092d0cce95994cb1ae0' OR
+                        "parsedData"[2] = '0x0363a3deBe776de575C36F524b7877dB7dd461Db' AND
+                        "parsedData"[2] != '0x0000000000000000000000000000000000000000'
+
+                    GROUP BY "parsedData"[2], "parsedData"[1]
+                `;
+                const result = await connection.query(query);
+                console.log('Pool Unlocks Query Result:', result);
                 return result;
             }
         });

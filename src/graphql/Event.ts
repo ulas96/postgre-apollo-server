@@ -28,14 +28,24 @@ export const MintedTokensType = objectType({
     },
   });
 
-export const PoolDepositsType = objectType({
-    name: "PoolDeposits",
+export const PoolDepositType = objectType({
+    name: "PoolDeposit",
     definition(t) {
         t.nonNull.string("walletAddress");
         t.nonNull.string("poolAddress");
         t.nonNull.string("totalDeposits");
     }
 })
+
+export const PoolUnlockType = objectType({
+    name: "PoolUnlock",
+    definition(t) {
+        t.nonNull.string("walletAddress");
+        t.nonNull.string("poolAddress");
+        t.string("totalUnlocks");
+    }
+})
+
 
 export const EventsQuery = extendType({
     type: "Query",
@@ -77,7 +87,7 @@ export const MintedTokensQuery = extendType({
     type: "Query",
     definition(t) {
         t.nonNull.list.nonNull.field("poolDeposits", {
-            type: "PoolDeposits",
+            type: "PoolDeposit",
             async resolve(_parent, _args, context: Context, _info) {
                 const { connection } = context;
                 const query = `
@@ -87,12 +97,44 @@ export const MintedTokensQuery = extendType({
                         SUM(CAST("parsedData"[3] AS DECIMAL(65,0)))::TEXT as "totalDeposits"
                     FROM event
                     WHERE 
-                        "eventName" = 'Transfer' AND
+                        "parsedData"[1] = '0x934cf521743903D27e388d7E8517c636f3Cc4D54' OR
+                        "parsedData"[1] = '0x1a66208180c20cc893ac5092d0cce95994cb1ae0' OR
+                        "parsedData"[1] = '0x0363a3deBe776de575C36F524b7877dB7dd461Db' AND
                         "parsedData"[1] != '0x0000000000000000000000000000000000000000'
+
                     GROUP BY "parsedData"[2], "parsedData"[1]
                 `;
                 const result = await connection.query(query);
                 console.log('Pool Deposits Query Result:', result);
+                return result;
+            }
+        })
+    }
+});
+
+export const PoolUnlocksQuery = extendType({
+    type: "Query",
+    definition(t) {
+        t.nonNull.list.nonNull.field("poolUnlocks", {
+            type: "PoolUnlock",
+            async resolve(_parent, _args, context: Context, _info) {
+                const { connection } = context;
+                const query = `
+                    SELECT 
+                        "parsedData"[2] as "poolAddress",
+                        "parsedData"[1] as "walletAddress",
+                        SUM(CAST("parsedData"[3] AS DECIMAL(65,0)))::TEXT as "totalUnlocks"
+                    FROM event
+                    WHERE 
+                        "parsedData"[2] = '0x934cf521743903D27e388d7E8517c636f3Cc4D54' OR
+                        "parsedData"[2] = '0x1a66208180c20cc893ac5092d0cce95994cb1ae0' OR
+                        "parsedData"[2] = '0x0363a3deBe776de575C36F524b7877dB7dd461Db' AND
+                        "parsedData"[2] != '0x0000000000000000000000000000000000000000'
+
+                    GROUP BY "parsedData"[2], "parsedData"[1]
+                `;
+                const result = await connection.query(query);
+                console.log('Pool Unlocks Query Result:', result);
                 return result;
             }
         })

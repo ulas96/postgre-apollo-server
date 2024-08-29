@@ -26,20 +26,18 @@ type Mutation {
 }
 
 type PoolDeposit {
-  poolAddress: String!
   totalDeposits: String!
   walletAddress: String!
 }
 
 type PoolUnlock {
-  poolAddress: String!
-  totalUnlocks: String
+  totalUnlocks: String!
   walletAddress: String!
 }
 
 type Query {
   events: [Event!]!
   mintedTokens: [MintedTokens]!
-  poolDeposits: [PoolDeposit!]!
-  poolUnlocks: [PoolUnlock!]!
+  poolDeposits(walletAddress: String): [PoolDeposit!]!
+  poolUnlocks(walletAddress: String): [PoolUnlock!]!
 }

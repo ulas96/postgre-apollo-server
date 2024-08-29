@@ -158,6 +158,9 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    events: { // args
+      walletAddress?: string | null; // String
+    }
     mintedTokens: { // args
       walletAddress?: string | null; // String
     }

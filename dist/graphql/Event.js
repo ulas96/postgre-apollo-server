@@ -45,9 +45,31 @@ exports.EventsQuery = (0, nexus_1.extendType)({
     definition(t) {
         t.nonNull.list.nonNull.field("events", {
             type: "Event",
-            resolve(_parent, _args, context, _info) {
+            args: {
+                walletAddress: (0, nexus_1.stringArg)(),
+            },
+            async resolve(_parent, args, context, _info) {
                 const { connection } = context;
-                return connection.query(`SELECT * FROM event`);
+                const { walletAddress } = args;
+                let query = `SELECT * FROM event`;
+                if (walletAddress) {
+                    query += ` WHERE "parsedData"[1] = $1 OR "parsedData"[2] = $1`;
+                }
+                try {
+                    let result;
+                    if (walletAddress) {
+                        result = await connection.query(query, [walletAddress]);
+                    }
+                    else {
+                        result = await connection.query(query);
+                    }
+                    console.log('Events Query Result:', result);
+                    return result;
+                }
+                catch (error) {
+                    console.error('Error executing events query:', error);
+                    throw new Error('Failed to fetch events');
+                }
             }
         });
     }

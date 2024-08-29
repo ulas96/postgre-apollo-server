@@ -158,6 +158,9 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    mintedTokens: { // args
+      walletAddress?: string | null; // String
+    }
     poolDeposits: { // args
       walletAddress?: string | null; // String
     }

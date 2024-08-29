@@ -37,7 +37,7 @@ type PoolUnlock {
 
 type Query {
   events: [Event!]!
-  mintedTokens: [MintedTokens]!
+  mintedTokens(walletAddress: String): [MintedTokens]!
   poolDeposits(walletAddress: String): [PoolDeposit!]!
   poolUnlocks(walletAddress: String): [PoolUnlock!]!
 }

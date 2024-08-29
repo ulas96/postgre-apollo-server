@@ -57,19 +57,34 @@ exports.MintedTokensQuery = (0, nexus_1.extendType)({
     definition(t) {
         t.nonNull.list.field("mintedTokens", {
             type: "MintedTokens",
-            resolve(_parent, _args, context, _info) {
+            args: {
+                walletAddress: (0, nexus_1.stringArg)(),
+            },
+            async resolve(_parent, args, context, _info) {
                 const { connection } = context;
-                const query = `
-            SELECT 
-              "parsedData"[2] as "walletAddress",
-              SUM(CAST("parsedData"[3] AS DECIMAL(65,0)))::TEXT as "totalMinted"
-            FROM event
-            WHERE 
-              "eventName" = 'Transfer' AND
-              "parsedData"[1] = '0x0000000000000000000000000000000000000000'
-            GROUP BY "parsedData"[2]
-          `;
-                return connection.query(query);
+                const { walletAddress } = args;
+                let query = `
+              SELECT 
+                "parsedData"[2] as "walletAddress",
+                SUM(CAST("parsedData"[3] AS DECIMAL(65,0)))::TEXT as "totalMinted"
+              FROM event
+              WHERE 
+                "eventName" = 'Transfer' AND
+                "parsedData"[1] = '0x0000000000000000000000000000000000000000'
+            `;
+                if (walletAddress) {
+                    query += ` AND "parsedData"[2] = '${walletAddress}'`;
+                }
+                query += ` GROUP BY "parsedData"[2]`;
+                try {
+                    const result = await connection.query(query);
+                    console.log('Minted Tokens Query Result:', result);
+                    return result;
+                }
+                catch (error) {
+                    console.error('Error executing minted tokens query:', error);
+                    throw new Error('Failed to fetch minted tokens');
+                }
             },
         });
     },

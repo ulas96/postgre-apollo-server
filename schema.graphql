@@ -21,10 +21,6 @@ type MintedTokens {
   walletAddress: String
 }
 
-type Mutation {
-  createEvent(appName: String!, blockNumber: Int!, contractAddress: String!, createdAt: String!, eventData: String!, eventName: String!, eventSignature: String!, id: Int!, logIndex: Int!, parsedData: [String!]!, transactionHash: String!): Event!
-}
-
 type PoolDeposit {
   totalDeposits: String!
   walletAddress: String!

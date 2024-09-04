@@ -1,5 +1,4 @@
-import { list, extendType, intArg, nonNull, objectType, stringArg } from "nexus"; 
-import { Event } from "../entities/Event";
+import { extendType, objectType, stringArg } from "nexus"; 
 import { Context } from "../types/Context";
 
 export const EventType = objectType({
@@ -210,32 +209,3 @@ export const PoolUnlocksQuery = extendType({
     }
 });
 
-export const CreateEventMutation = extendType({
-    type: "Mutation",
-    definition(t) {
-        t.nonNull.field("createEvent", {
-            type: "Event",
-            args: {
-                id: nonNull(intArg()),
-                eventName: nonNull(stringArg()),
-                eventSignature: nonNull(stringArg()),
-                eventData: nonNull(stringArg()),
-                blockNumber: nonNull(intArg()),
-                transactionHash: nonNull(stringArg()),
-                logIndex: nonNull(intArg()),
-                parsedData: nonNull(list(nonNull(stringArg()))),
-                contractAddress: nonNull(stringArg()),
-                appName: nonNull(stringArg()),
-                createdAt: nonNull(stringArg())
-            },
-            resolve(_parent, args, _context, _info) {
-                const { id, eventName, eventSignature, eventData, blockNumber, transactionHash, logIndex, parsedData, contractAddress, appName, createdAt } = args;
-                
-                return Event.create({ id, eventName, eventSignature, eventData, blockNumber, transactionHash, logIndex, parsedData, contractAddress, appName, createdAt: new Date(createdAt) }).save().then(event => ({
-                    ...event,
-                    createdAt: event.createdAt.toISOString()
-                }));
-            }
-        })
-    },
-})

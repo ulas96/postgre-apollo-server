@@ -45,21 +45,6 @@ export interface NexusGenObjects {
     totalMinted?: string | null; // String
     walletAddress?: string | null; // String
   }
-  Mutation: {};
-  PoolDeposit: { // root type
-    totalDeposits: string; // String!
-    walletAddress: string; // String!
-  }
-  PoolUnlock: { // root type
-    totalUnlocks: string; // String!
-    walletAddress: string; // String!
-  }
-  Position: { // root type
-    position: string; // String!
-    totalDeposits: string; // String!
-    totalUnlocks: string; // String!
-    walletAddress: string; // String!
-  }
   Query: {};
 }
 
@@ -91,29 +76,9 @@ export interface NexusGenFieldTypes {
     totalMinted: string | null; // String
     walletAddress: string | null; // String
   }
-  Mutation: { // field return type
-    createEvent: NexusGenRootTypes['Event']; // Event!
-  }
-  PoolDeposit: { // field return type
-    totalDeposits: string; // String!
-    walletAddress: string; // String!
-  }
-  PoolUnlock: { // field return type
-    totalUnlocks: string; // String!
-    walletAddress: string; // String!
-  }
-  Position: { // field return type
-    position: string; // String!
-    totalDeposits: string; // String!
-    totalUnlocks: string; // String!
-    walletAddress: string; // String!
-  }
   Query: { // field return type
     events: NexusGenRootTypes['Event'][]; // [Event!]!
     mintedTokens: Array<NexusGenRootTypes['MintedTokens'] | null>; // [MintedTokens]!
-    poolDeposits: NexusGenRootTypes['PoolDeposit'][]; // [PoolDeposit!]!
-    poolUnlocks: NexusGenRootTypes['PoolUnlock'][]; // [PoolUnlock!]!
-    positions: NexusGenRootTypes['Position'][]; // [Position!]!
   }
 }
 
@@ -135,62 +100,18 @@ export interface NexusGenFieldTypeNames {
     totalMinted: 'String'
     walletAddress: 'String'
   }
-  Mutation: { // field return type name
-    createEvent: 'Event'
-  }
-  PoolDeposit: { // field return type name
-    totalDeposits: 'String'
-    walletAddress: 'String'
-  }
-  PoolUnlock: { // field return type name
-    totalUnlocks: 'String'
-    walletAddress: 'String'
-  }
-  Position: { // field return type name
-    position: 'String'
-    totalDeposits: 'String'
-    totalUnlocks: 'String'
-    walletAddress: 'String'
-  }
   Query: { // field return type name
     events: 'Event'
     mintedTokens: 'MintedTokens'
-    poolDeposits: 'PoolDeposit'
-    poolUnlocks: 'PoolUnlock'
-    positions: 'Position'
   }
 }
 
 export interface NexusGenArgTypes {
-  Mutation: {
-    createEvent: { // args
-      appName: string; // String!
-      blockNumber: number; // Int!
-      contractAddress: string; // String!
-      createdAt: string; // String!
-      eventData: string; // String!
-      eventName: string; // String!
-      eventSignature: string; // String!
-      id: number; // Int!
-      logIndex: number; // Int!
-      parsedData: string[]; // [String!]!
-      transactionHash: string; // String!
-    }
-  }
   Query: {
     events: { // args
       walletAddress?: string | null; // String
     }
     mintedTokens: { // args
-      walletAddress?: string | null; // String
-    }
-    poolDeposits: { // args
-      walletAddress?: string | null; // String
-    }
-    poolUnlocks: { // args
-      walletAddress?: string | null; // String
-    }
-    positions: { // args
       walletAddress?: string | null; // String
     }
   }

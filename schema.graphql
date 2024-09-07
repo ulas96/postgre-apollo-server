@@ -35,9 +35,17 @@ type PoolUnlock {
   walletAddress: String!
 }
 
+type Position {
+  position: String!
+  totalDeposits: String!
+  totalUnlocks: String!
+  walletAddress: String!
+}
+
 type Query {
   events(walletAddress: String): [Event!]!
   mintedTokens(walletAddress: String): [MintedTokens]!
   poolDeposits(walletAddress: String): [PoolDeposit!]!
   poolUnlocks(walletAddress: String): [PoolUnlock!]!
+  positions(walletAddress: String): [Position!]!
 }

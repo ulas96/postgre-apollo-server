@@ -28,22 +28,10 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
-  Event: { // root type
-    appName: string; // String!
-    blockNumber: number; // Int!
-    contractAddress: string; // String!
-    createdAt: string; // String!
-    eventData: string; // String!
-    eventName: string; // String!
-    eventSignature: string; // String!
-    id: number; // Int!
-    logIndex: number; // Int!
-    parsedData: string[]; // [String!]!
-    transactionHash: string; // String!
-  }
-  MintedTokens: { // root type
-    totalMinted?: string | null; // String
-    walletAddress?: string | null; // String
+  Mutation: {};
+  Price: { // root type
+    date: string; // String!
+    price: string; // String!
   }
   Query: {};
 }
@@ -59,60 +47,41 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
-  Event: { // field return type
-    appName: string; // String!
-    blockNumber: number; // Int!
-    contractAddress: string; // String!
-    createdAt: string; // String!
-    eventData: string; // String!
-    eventName: string; // String!
-    eventSignature: string; // String!
-    id: number; // Int!
-    logIndex: number; // Int!
-    parsedData: string[]; // [String!]!
-    transactionHash: string; // String!
+  Mutation: { // field return type
+    createPrice: NexusGenRootTypes['Price']; // Price!
   }
-  MintedTokens: { // field return type
-    totalMinted: string | null; // String
-    walletAddress: string | null; // String
+  Price: { // field return type
+    date: string; // String!
+    price: string; // String!
   }
   Query: { // field return type
-    events: NexusGenRootTypes['Event'][]; // [Event!]!
-    mintedTokens: Array<NexusGenRootTypes['MintedTokens'] | null>; // [MintedTokens]!
+    prices: NexusGenRootTypes['Price'][]; // [Price!]!
   }
 }
 
 export interface NexusGenFieldTypeNames {
-  Event: { // field return type name
-    appName: 'String'
-    blockNumber: 'Int'
-    contractAddress: 'String'
-    createdAt: 'String'
-    eventData: 'String'
-    eventName: 'String'
-    eventSignature: 'String'
-    id: 'Int'
-    logIndex: 'Int'
-    parsedData: 'String'
-    transactionHash: 'String'
+  Mutation: { // field return type name
+    createPrice: 'Price'
   }
-  MintedTokens: { // field return type name
-    totalMinted: 'String'
-    walletAddress: 'String'
+  Price: { // field return type name
+    date: 'String'
+    price: 'String'
   }
   Query: { // field return type name
-    events: 'Event'
-    mintedTokens: 'MintedTokens'
+    prices: 'Price'
   }
 }
 
 export interface NexusGenArgTypes {
-  Query: {
-    events: { // args
-      walletAddress?: string | null; // String
+  Mutation: {
+    createPrice: { // args
+      date: string; // String!
+      price: number; // Float!
     }
-    mintedTokens: { // args
-      walletAddress?: string | null; // String
+  }
+  Query: {
+    prices: { // args
+      date?: string | null; // String
     }
   }
 }

@@ -2,26 +2,15 @@
 ### Do not make changes to this file directly
 
 
-type Event {
-  appName: String!
-  blockNumber: Int!
-  contractAddress: String!
-  createdAt: String!
-  eventData: String!
-  eventName: String!
-  eventSignature: String!
-  id: Int!
-  logIndex: Int!
-  parsedData: [String!]!
-  transactionHash: String!
+type Mutation {
+  createPrice(date: String!, price: Float!): Price!
 }
 
-type MintedTokens {
-  totalMinted: String
-  walletAddress: String
+type Price {
+  date: String!
+  price: String!
 }
 
 type Query {
-  events(walletAddress: String): [Event!]!
-  mintedTokens(walletAddress: String): [MintedTokens]!
+  prices(date: String): [Price!]!
 }

@@ -1,13 +1,12 @@
 import { DataSource } from "typeorm";
 import dotenv from "dotenv";
-import { Event } from "./entities/Event";
-
+import { Price } from "./entities/Price";
 dotenv.config();
 
 
 export default new DataSource({
         type: "postgres",
         url: process.env.DATABASE_URL,
-        entities: [Event],
+        entities: [Price],
         synchronize: true
 })

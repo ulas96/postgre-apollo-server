@@ -1,62 +1,60 @@
-
-
-
-
-
-
-import { createPublicClient, http } from 'viem';
+import axios from "axios";
+import { createPublicClient, http, decodeEventLog, parseAbi } from 'viem';
 import { avalanche } from 'viem/chains';
 
-// 2. Set up your client with desired chain & transport.
-const client = createPublicClient({
-  chain: avalanche,
-  transport: http(),
-});
 
+export const getAvaxPrice = async (date: Date) => {
+    const graphqlUrl = "http://34.90.72.213:5151";
 
-export async function getTokenTransfers(txHash: `0x${string}`) {
-    // ERC-20 Transfer event ABI
-// const transferEventAbi = parseAbi([
-//     'event Transfer(address indexed from, address indexed to, uint256 value)',
-//   ]);
+    // Format the date to YYYY-MM-DDTHH:mm:00.000Z
+    const formattedDate = date.toISOString().replace(/:\d{2}\.\d{3}Z$/, ':00.000Z');
 
-  // Fetch transaction receipt
-  const receipt = await client.getTransactionReceipt({ hash: txHash });
-  
-  // Process logs
-  receipt.logs.forEach((log) => {
-    // try {
-    //   const decodedLog = decodeEventLog({
-    //     abi: transferEventAbi,
-    //     data: log.data,
-    //     topics: log.topics,
-    //   });
-      
-    //   if (log.address === '0x698c34bad17193af7e1b4eb07d1309ff6c5e715e') {
-    //     console.log('Token Transfer:');
-    //     console.log('From:', decodedLog.args.from);
-    //     console.log('To:', decodedLog.args.to);
-    //     console.log('Value:', decodedLog.args.value.toString());
-    //     console.log('Token Contract:', log.address);
-    //     console.log('---');
-    //   }
-    // } catch (error) {
-    //   // This log is not a Transfer event, skip it
-    // }
-    console.log(log);
-  });
+    const query = `
+        query {
+            prices(date: "${formattedDate}") {
+                date    
+                price
+            }
+        }
+    `;
 
-  return receipt.logs;
+    const response = await axios.post(graphqlUrl, { query });
+    console.log(response.data.data.prices[0].price);
 }
 
+export const getTransactionTransfers = async (txHash: `0x${string}`) => {
 
 
-async function main() {
-    const txHash = '0x4179dd53efa998cf9148a949f97554b663c57f902fe70369d76dc8c314c6af82';
-    const transfers = await getTokenTransfers(txHash);
-    console.log(transfers);
+    const client = createPublicClient({
+        chain: avalanche,
+        transport: http(),
+    });
+
+    const transferEventAbi = parseAbi([
+        'event Transfer(address indexed from, address indexed to, uint256 value)',
+      ]);
+
+    const receipt = await client.getTransactionReceipt({ hash: txHash });
+    console.log(receipt);
+
+    receipt.logs.forEach((log) => {
+        try {
+          const decodedLog = decodeEventLog({
+            abi: transferEventAbi,
+            data: log.data,
+            topics: log.topics,
+          });
+          
+          if (decodedLog.eventName === 'Transfer') {
+            console.log('Token Transfer:');
+            console.log('From:', decodedLog.args.from);
+            console.log('To:', decodedLog.args.to);
+            console.log('Value:', decodedLog.args.value.toString());
+            console.log('Token Contract:', log.address);
+            console.log('---');
+          }
+        } catch (error) {
+          // This log is not a Transfer event, skip it
+        }
+      });
 }
-
-main();
-
-

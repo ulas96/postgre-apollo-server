@@ -1,7 +1,7 @@
 import axios from "axios";
 import { createPublicClient, http, decodeEventLog, parseAbi } from 'viem';
 import { avalanche } from 'viem/chains';
-import { graphqlUrl, wsAVAXContractAddress, xAVAXContractAddress, aUSDContractAddress } from "../constants";
+import { graphqlUrl, wsAVAXContractAddress, xAVAXContractAddress, aUSDContractAddress } from "../constants/index";
 
 interface Transfer {
   from: string;
@@ -25,7 +25,7 @@ export const getAvaxPrice = async (date: Date) => {
     `;
 
     const response = await axios.post(graphqlUrl, { query });
-    console.log(response.data.data.prices[0].price);
+    return response.data.data.prices[0].price;
 }
 
 export const getTransactionTransfers = async (txHash: `0x${string}`): Promise<Transfer[]> => {
@@ -94,21 +94,23 @@ export const displayAllTransfers = async (txHash: `0x${string}`) => {
 export const getXAVAXPriceByTransaction = async (txHash: `0x${string}`) => {
     const transfers = await getTransactionTransfers(txHash);
 
-    if(transfers.filter(transfer => transfer.tokenContract === aUSDContractAddress).length > 0) {
-        const wsAVAXTransfers = transfers.filter(transfer => transfer.tokenContract === wsAVAXContractAddress)[0].value;
-        const xAVAXTransfers = transfers.filter(transfer => transfer.tokenContract === xAVAXContractAddress)[0].value;
 
-        const wsAVAXPrice = await getAvaxPrice(transfers.filter(transfer => transfer.tokenContract === wsAVAXContractAddress)[0].timestamp);
+    if(transfers.filter(transfer => transfer.tokenContract === aUSDContractAddress.toLowerCase()).length > 0) {
+        const wsAVAXTransfers = transfers.filter(transfer => transfer.tokenContract === wsAVAXContractAddress.toLowerCase())[0].value;
+        const xAVAXTransfers = transfers.filter(transfer => transfer.tokenContract === xAVAXContractAddress.toLowerCase())[0].value;
+        const wsAVAXPrice = await getAvaxPrice(transfers.filter(transfer => transfer.tokenContract === wsAVAXContractAddress.toLowerCase())[0].timestamp);
 
         const price = (Number(wsAVAXPrice) * Number(wsAVAXTransfers) / 2) / Number(xAVAXTransfers);
         return price;
     } else {
-        const wsAVAXTransfers = transfers.filter(transfer => transfer.tokenContract === wsAVAXContractAddress)[0].value;
-        const xAVAXTransfers = transfers.filter(transfer => transfer.tokenContract === xAVAXContractAddress)[0].value;
+        const wsAVAXTransfers = transfers.filter(transfer => transfer.tokenContract === wsAVAXContractAddress.toLowerCase())[0].value;
+        const xAVAXTransfers = transfers.filter(transfer => transfer.tokenContract === xAVAXContractAddress.toLowerCase())[0].value;
 
-        const wsAVAXPrice = await getAvaxPrice(transfers.filter(transfer => transfer.tokenContract === wsAVAXContractAddress)[0].timestamp);
+        const wsAVAXPrice = await getAvaxPrice(transfers.filter(transfer => transfer.tokenContract === wsAVAXContractAddress.toLowerCase())[0].timestamp);
 
         const price = (Number(wsAVAXPrice) * Number(wsAVAXTransfers)) / Number(xAVAXTransfers);
         return price;
     }
 }
+
+getXAVAXPriceByTransaction("0x4179dd53efa998cf9148a949f97554b663c57f902fe70369d76dc8c314c6af82");

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { createPublicClient, http, decodeEventLog, parseAbi } from 'viem';
 import { avalanche } from 'viem/chains';
-import { graphqlUrl/*, wsAVAXContractAddress, xAVAXContractAddress, aUSDCContractAddress*/ } from "../constants";
+import { graphqlUrl, wsAVAXContractAddress, xAVAXContractAddress, aUSDContractAddress } from "../constants";
 
 interface Transfer {
   from: string;
@@ -77,7 +77,7 @@ export const getBlockTimestamp = async (blockNumber: number): Promise<Date> => {
 }
 
 // Function to display all transfers
-const displayAllTransfers = async (txHash: `0x${string}`) => {
+export const displayAllTransfers = async (txHash: `0x${string}`) => {
     const transfers = await getTransactionTransfers(txHash);
     console.log(`Total transfers found: ${transfers.length}`);
     for (let i = 0; i < transfers.length; i++) {
@@ -91,5 +91,24 @@ const displayAllTransfers = async (txHash: `0x${string}`) => {
     }
 }
 
-// Call the function with your transaction hash
-displayAllTransfers("0x4179dd53efa998cf9148a949f97554b663c57f902fe70369d76dc8c314c6af82");
+export const getXAVAXPriceByTransaction = async (txHash: `0x${string}`) => {
+    const transfers = await getTransactionTransfers(txHash);
+
+    if(transfers.filter(transfer => transfer.tokenContract === aUSDContractAddress).length > 0) {
+        const wsAVAXTransfers = transfers.filter(transfer => transfer.tokenContract === wsAVAXContractAddress)[0].value;
+        const xAVAXTransfers = transfers.filter(transfer => transfer.tokenContract === xAVAXContractAddress)[0].value;
+
+        const wsAVAXPrice = await getAvaxPrice(transfers.filter(transfer => transfer.tokenContract === wsAVAXContractAddress)[0].timestamp);
+
+        const price = (Number(wsAVAXPrice) * Number(wsAVAXTransfers) / 2) / Number(xAVAXTransfers);
+        return price;
+    } else {
+        const wsAVAXTransfers = transfers.filter(transfer => transfer.tokenContract === wsAVAXContractAddress)[0].value;
+        const xAVAXTransfers = transfers.filter(transfer => transfer.tokenContract === xAVAXContractAddress)[0].value;
+
+        const wsAVAXPrice = await getAvaxPrice(transfers.filter(transfer => transfer.tokenContract === wsAVAXContractAddress)[0].timestamp);
+
+        const price = (Number(wsAVAXPrice) * Number(wsAVAXTransfers)) / Number(xAVAXTransfers);
+        return price;
+    }
+}

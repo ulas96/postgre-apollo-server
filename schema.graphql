@@ -2,6 +2,14 @@
 ### Do not make changes to this file directly
 
 
+type BurnedTokens {
+  benefit: String
+  burnedAmount: String
+  createdAt: String
+  transactionHash: String
+  walletAddress: String
+}
+
 type Event {
   appName: String!
   blockNumber: Int!
@@ -17,11 +25,21 @@ type Event {
 }
 
 type MintedTokens {
-  totalMinted: String
+  cost: String
+  createdAt: String
+  mintedAmount: String
+  transactionHash: String
   walletAddress: String
 }
 
 type Query {
+  burnedTokens(walletAddress: String): [BurnedTokens]!
   events(walletAddress: String): [Event!]!
   mintedTokens(walletAddress: String): [MintedTokens]!
+  walletPositions(walletAddress: String): [WalletPosition]!
+}
+
+type WalletPosition {
+  position: String!
+  walletAddress: String!
 }

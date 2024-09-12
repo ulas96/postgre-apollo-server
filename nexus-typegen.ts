@@ -28,6 +28,13 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  BurnedTokens: { // root type
+    benefit?: string | null; // String
+    burnedAmount?: string | null; // String
+    createdAt?: string | null; // String
+    transactionHash?: string | null; // String
+    walletAddress?: string | null; // String
+  }
   Event: { // root type
     appName: string; // String!
     blockNumber: number; // Int!
@@ -42,10 +49,17 @@ export interface NexusGenObjects {
     transactionHash: string; // String!
   }
   MintedTokens: { // root type
-    totalMinted?: string | null; // String
+    cost?: string | null; // String
+    createdAt?: string | null; // String
+    mintedAmount?: string | null; // String
+    transactionHash?: string | null; // String
     walletAddress?: string | null; // String
   }
   Query: {};
+  WalletPosition: { // root type
+    position: string; // String!
+    walletAddress: string; // String!
+  }
 }
 
 export interface NexusGenInterfaces {
@@ -59,6 +73,13 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  BurnedTokens: { // field return type
+    benefit: string | null; // String
+    burnedAmount: string | null; // String
+    createdAt: string | null; // String
+    transactionHash: string | null; // String
+    walletAddress: string | null; // String
+  }
   Event: { // field return type
     appName: string; // String!
     blockNumber: number; // Int!
@@ -73,16 +94,32 @@ export interface NexusGenFieldTypes {
     transactionHash: string; // String!
   }
   MintedTokens: { // field return type
-    totalMinted: string | null; // String
+    cost: string | null; // String
+    createdAt: string | null; // String
+    mintedAmount: string | null; // String
+    transactionHash: string | null; // String
     walletAddress: string | null; // String
   }
   Query: { // field return type
+    burnedTokens: Array<NexusGenRootTypes['BurnedTokens'] | null>; // [BurnedTokens]!
     events: NexusGenRootTypes['Event'][]; // [Event!]!
     mintedTokens: Array<NexusGenRootTypes['MintedTokens'] | null>; // [MintedTokens]!
+    walletPositions: Array<NexusGenRootTypes['WalletPosition'] | null>; // [WalletPosition]!
+  }
+  WalletPosition: { // field return type
+    position: string; // String!
+    walletAddress: string; // String!
   }
 }
 
 export interface NexusGenFieldTypeNames {
+  BurnedTokens: { // field return type name
+    benefit: 'String'
+    burnedAmount: 'String'
+    createdAt: 'String'
+    transactionHash: 'String'
+    walletAddress: 'String'
+  }
   Event: { // field return type name
     appName: 'String'
     blockNumber: 'Int'
@@ -97,21 +134,36 @@ export interface NexusGenFieldTypeNames {
     transactionHash: 'String'
   }
   MintedTokens: { // field return type name
-    totalMinted: 'String'
+    cost: 'String'
+    createdAt: 'String'
+    mintedAmount: 'String'
+    transactionHash: 'String'
     walletAddress: 'String'
   }
   Query: { // field return type name
+    burnedTokens: 'BurnedTokens'
     events: 'Event'
     mintedTokens: 'MintedTokens'
+    walletPositions: 'WalletPosition'
+  }
+  WalletPosition: { // field return type name
+    position: 'String'
+    walletAddress: 'String'
   }
 }
 
 export interface NexusGenArgTypes {
   Query: {
+    burnedTokens: { // args
+      walletAddress?: string | null; // String
+    }
     events: { // args
       walletAddress?: string | null; // String
     }
     mintedTokens: { // args
+      walletAddress?: string | null; // String
+    }
+    walletPositions: { // args
       walletAddress?: string | null; // String
     }
   }

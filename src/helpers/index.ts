@@ -12,20 +12,31 @@ interface Transfer {
 }
 
 const getAvaxPrice = async (date: Date) => {
-    // Format the date to YYYY-MM-DDTHH:mm:00.000Z
-    const formattedDate = date.toISOString().replace(/:\d{2}\.\d{3}Z$/, ':00.000Z');
+    try {
+        // Format the date to YYYY-MM-DDTHH:mm:00.000Z
+        const formattedDate = date.toISOString().replace(/:\d{2}\.\d{3}Z$/, ':00.000Z');
 
-    const query = `
-        query {
-            prices(date: "${formattedDate}") {
-                date    
-                price
+        const query = `
+            query {
+                prices(date: "${formattedDate}") {
+                    date    
+                    price
+                }
             }
-        }
-    `;
+        `;
 
-    const response = await axios.post(graphqlUrl, { query });
-    return response.data.data.prices[0].price;
+        const response = await axios.post(graphqlUrl, { query });
+        
+        if (response.data && response.data.data && response.data.data.prices && response.data.data.prices.length > 0) {
+            return parseFloat(response.data.data.prices[0].price);
+        } else {
+            console.error(`No price data found for date: ${formattedDate}`);
+            return null;
+        }
+    } catch (error) {
+        console.error(`Error fetching AVAX price for date ${date}:`, error);
+        return null;
+    }
 }
 
 const getTransactionTransfers = async (txHash: `0x${string}`): Promise<Transfer[]> => {
@@ -91,24 +102,39 @@ const getBlockTimestamp = async (blockNumber: number): Promise<Date> => {
 //     }
 // }
 
-export const getXAVAXCostByTransaction = async (txHash: `0x${string}`) => {
-    const transfers = await getTransactionTransfers(txHash);
+export const getXAVAXPriceByTransaction = async (txHash: `0x${string}`) => {
+    try {
+        const transfers = await getTransactionTransfers(txHash);
 
+        if (transfers.length === 0) {
+            console.error(`No transfers found for transaction: ${txHash}`);
+            return 0;
+        }
 
-    if(transfers.filter(transfer => transfer.tokenContract === aUSDContractAddress.toLowerCase()).length > 0) {
-        const wsAVAXTransfers = transfers.filter(transfer => transfer.tokenContract === wsAVAXContractAddress.toLowerCase())[0].value;
-        const xAVAXTransfers = transfers.filter(transfer => transfer.tokenContract === xAVAXContractAddress.toLowerCase())[0].value;
-        const wsAVAXPrice = await getAvaxPrice(transfers.filter(transfer => transfer.tokenContract === wsAVAXContractAddress.toLowerCase())[0].timestamp);
+        const wsAVAXTransfer = transfers.find(transfer => transfer.tokenContract === wsAVAXContractAddress.toLowerCase());
+        const xAVAXTransfer = transfers.find(transfer => transfer.tokenContract === xAVAXContractAddress.toLowerCase());
 
-        const price = (Number(wsAVAXPrice) * Number(wsAVAXTransfers) / 2) / Number(xAVAXTransfers);
+        if (!wsAVAXTransfer || !xAVAXTransfer) {
+            console.error(`Missing required transfers for transaction: ${txHash}`);
+            return 0;
+        }
+
+        const wsAVAXPrice = await getAvaxPrice(wsAVAXTransfer.timestamp);
+
+        if (wsAVAXPrice === null) {
+            console.error(`Failed to get AVAX price for transaction: ${txHash}`);
+            return 0;
+        }
+
+        const aUSDTransfer = transfers.find(transfer => transfer.tokenContract === aUSDContractAddress.toLowerCase());
+
+        const price = aUSDTransfer
+            ? (wsAVAXPrice * Number(wsAVAXTransfer.value) / 2) / Number(xAVAXTransfer.value)
+            : (wsAVAXPrice * Number(wsAVAXTransfer.value)) / Number(xAVAXTransfer.value);
+
         return price;
-    } else {
-        const wsAVAXTransfers = transfers.filter(transfer => transfer.tokenContract === wsAVAXContractAddress.toLowerCase())[0].value;
-        const xAVAXTransfers = transfers.filter(transfer => transfer.tokenContract === xAVAXContractAddress.toLowerCase())[0].value;
-
-        const wsAVAXPrice = await getAvaxPrice(transfers.filter(transfer => transfer.tokenContract === wsAVAXContractAddress.toLowerCase())[0].timestamp);
-
-        const price = (Number(wsAVAXPrice) * Number(wsAVAXTransfers)) / Number(xAVAXTransfers);
-        return price;
+    } catch (error) {
+        console.error(`Error calculating xAVAX price for transaction ${txHash}:`, error);
+        return 0;
     }
 }

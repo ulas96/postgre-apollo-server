@@ -33,7 +33,7 @@ export const getTransactionTransfers = async (txHash: `0x${string}`) => {
     const transferEventAbi = parseAbi([
         'event Transfer(address indexed from, address indexed to, uint256 value)',
       ]);
-
+    
     const receipt = await client.getTransactionReceipt({ hash: txHash });
     console.log(receipt);
 

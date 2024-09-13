@@ -40,6 +40,8 @@ type Query {
 }
 
 type WalletPosition {
-  position: String!
+  averageEntryPrice: String!
+  positionAmount: String!
+  positionValue: String!
   walletAddress: String!
 }

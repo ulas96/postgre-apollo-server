@@ -1,6 +1,6 @@
 import { extendType, objectType, stringArg } from "nexus"; 
 import { Context } from "../types/Context";
-import { getXAVAXPriceByTransaction } from "../helpers/index";
+import { getXAVAXPriceByTransaction, getXAVAXPrice } from "../helpers/index";
 
 export const EventType = objectType({
     name: "Event",
@@ -37,7 +37,7 @@ export const BurnedTokensType = objectType({
       t.string("walletAddress");  
       t.string("burnedAmount");  
       t.string("createdAt");
-      t.string("benefit");  // Add this line to include the cost field
+      t.string("benefit");  
     },
   });
 
@@ -45,7 +45,9 @@ export const WalletPositionType = objectType({
   name: "WalletPosition",
   definition(t) {
     t.nonNull.string("walletAddress");
-    t.nonNull.string("position");
+    t.nonNull.string("positionAmount");
+    t.nonNull.string("averageEntryPrice");
+    t.nonNull.string("positionValue"); // Add this line
   },
 });
 
@@ -124,6 +126,7 @@ export const MintedTokensQuery = extendType({
                     result = await connection.query(query, [walletAddress]);
                 } else {
                     result = await connection.query(query);
+
                 }
 
                 // Calculate cost for each transaction
@@ -169,8 +172,8 @@ export const BurnedTokensQuery = extendType({
                 MAX("createdAt") as "createdAt"
               FROM event
               WHERE 
-                "eventName" = 'Transfer' AND
-                "parsedData"[2] = '0x0000000000000000000000000000000000000000'
+                ("parsedData"[2] = '0x0000000000000000000000000000000000000000' OR 
+                "parsedData"[2] = '0x013b34DBA0d6c9810F530534507144a8646E3273')
             `;
 
             if (walletAddress) {
@@ -190,15 +193,15 @@ export const BurnedTokensQuery = extendType({
                     result = await connection.query(query);
                 }
 
-                // Calculate cost for each transaction
+                // Calculate benefit for each transaction
                 const resultWithBenefit = await Promise.all(result.map(async (row: any) => {
                     try {
                         const xavaxCost = await getXAVAXPriceByTransaction(row.transactionHash);
                         const benefit = (parseFloat(row.burnedAmount) * xavaxCost).toFixed(6);
                         return { ...row, benefit };
                     } catch (error) {
-                        console.error(`Error calculating cost for transaction ${row.transactionHash}:`, error);
-                        return { ...row, cost: '0' };
+                        console.error(`Error calculating benefit for transaction ${row.transactionHash}:`, error);
+                        return { ...row, benefit: '0' };
                     }
                 }));
 
@@ -229,11 +232,14 @@ export const WalletPositionQuery = extendType({
           WITH minted AS (
             SELECT 
               "parsedData"[2] as "walletAddress",
-              SUM(CAST("parsedData"[3] AS DECIMAL(65,0)) / 1000000000000000000) as "mintedAmount"
+              SUM(CAST("parsedData"[3] AS DECIMAL(65,0)) / 1000000000000000000) as "mintedAmount",
+              array_agg("transactionHash") as "transactionHashes",
+              array_agg(CAST("parsedData"[3] AS DECIMAL(65,0)) / 1000000000000000000) as "amounts"
             FROM event
             WHERE 
               "eventName" = 'Transfer' AND
               "parsedData"[1] = '0x0000000000000000000000000000000000000000'
+            ${walletAddress ? `AND "parsedData"[2] = $1` : ''}
             GROUP BY "parsedData"[2]
           ),
           burned AS (
@@ -242,20 +248,20 @@ export const WalletPositionQuery = extendType({
               SUM(CAST("parsedData"[3] AS DECIMAL(65,0)) / 1000000000000000000) as "burnedAmount"
             FROM event
             WHERE 
-              "eventName" = 'Transfer' AND
-              "parsedData"[2] = '0x0000000000000000000000000000000000000000'
+             ( "parsedData"[2] = '0x0000000000000000000000000000000000000000' OR
+              "parsedData"[2] = '0x013b34DBA0d6c9810F530534507144a8646E3273')
+            ${walletAddress ? `AND "parsedData"[1] = $1` : ''}
             GROUP BY "parsedData"[1]
           )
           SELECT 
             COALESCE(m."walletAddress", b."walletAddress") as "walletAddress",
-            (COALESCE(m."mintedAmount", 0) - COALESCE(b."burnedAmount", 0))::TEXT as "position"
+            (COALESCE(m."mintedAmount", 0) - COALESCE(b."burnedAmount", 0))::TEXT as "positionAmount",
+            m."transactionHashes",
+            m."amounts"
           FROM minted m
           FULL OUTER JOIN burned b ON m."walletAddress" = b."walletAddress"
+          ${walletAddress ? `WHERE COALESCE(m."walletAddress", b."walletAddress") = $1` : ''}
         `;
-
-        if (walletAddress) {
-          query += ` WHERE m."walletAddress" = $1 OR b."walletAddress" = $1`;
-        }
 
         try {
           let result;
@@ -265,8 +271,26 @@ export const WalletPositionQuery = extendType({
             result = await connection.query(query);
           }
 
-          console.log('Wallet Positions Query Result:', result);
-          return result;
+          // Get current XAVAX price
+          const currentXAVAXPrice = await getXAVAXPrice();
+
+          // Calculate average entry price and current value for each wallet
+          const resultWithAverageEntryPrice = await Promise.all(result.map(async (row: any) => {
+            if (row.transactionHashes && row.amounts) {
+              let totalCost = 0;
+              for (let i = 0; i < row.transactionHashes.length; i++) {
+                const xavaxPrice = await getXAVAXPriceByTransaction(row.transactionHashes[i]);
+                totalCost += row.amounts[i] * xavaxPrice;
+              }
+              const averageEntryPrice = (totalCost / parseFloat(row.positionAmount)).toFixed(6);
+              const positionValue = (parseFloat(row.positionAmount) * currentXAVAXPrice).toFixed(6);
+              return { ...row, averageEntryPrice, positionValue };
+            }
+            return { ...row, averageEntryPrice: '0', positionValue: '0' };
+          }));
+
+          console.log('Wallet Positions Query Result:', resultWithAverageEntryPrice);
+          return resultWithAverageEntryPrice;
         } catch (error) {
           console.error('Error executing wallet positions query:', error);
           throw new Error('Failed to fetch wallet positions');

@@ -57,7 +57,9 @@ export interface NexusGenObjects {
   }
   Query: {};
   WalletPosition: { // root type
-    position: string; // String!
+    averageEntryPrice: string; // String!
+    positionAmount: string; // String!
+    positionValue: string; // String!
     walletAddress: string; // String!
   }
 }
@@ -107,7 +109,9 @@ export interface NexusGenFieldTypes {
     walletPositions: Array<NexusGenRootTypes['WalletPosition'] | null>; // [WalletPosition]!
   }
   WalletPosition: { // field return type
-    position: string; // String!
+    averageEntryPrice: string; // String!
+    positionAmount: string; // String!
+    positionValue: string; // String!
     walletAddress: string; // String!
   }
 }
@@ -147,7 +151,9 @@ export interface NexusGenFieldTypeNames {
     walletPositions: 'WalletPosition'
   }
   WalletPosition: { // field return type name
-    position: 'String'
+    averageEntryPrice: 'String'
+    positionAmount: 'String'
+    positionValue: 'String'
     walletAddress: 'String'
   }
 }

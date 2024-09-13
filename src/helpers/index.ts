@@ -1,7 +1,7 @@
 import axios from "axios";
 import { createPublicClient, http, decodeEventLog, parseAbi } from 'viem';
 import { avalanche } from 'viem/chains';
-import { graphqlUrl, wsAVAXContractAddress, xAVAXContractAddress, aUSDContractAddress } from "../constants/index";
+import { graphqlUrl, wsAVAXContractAddress, xAVAXContractAddress, aUSDContractAddress, xAVAXAbi } from "../constants/index";
 
 interface Transfer {
   from: string;
@@ -10,6 +10,11 @@ interface Transfer {
   tokenContract: string;
   timestamp: Date;
 }
+
+export const weiToEth = (wei: number) => {
+    return wei/ 10 ** 18;
+}
+
 
 const getAvaxPrice = async (date: Date) => {
     try {
@@ -137,4 +142,19 @@ export const getXAVAXPriceByTransaction = async (txHash: `0x${string}`) => {
         console.error(`Error calculating xAVAX price for transaction ${txHash}:`, error);
         return 0;
     }
+}
+
+export const getXAVAXPrice = async () => {
+    const client = createPublicClient({
+        chain: avalanche,
+        transport: http(),
+    });
+
+    const nav = await client.readContract({
+        address: xAVAXContractAddress,
+        abi: xAVAXAbi,
+        functionName: 'nav',
+    });
+
+    return weiToEth(Number(nav));
 }

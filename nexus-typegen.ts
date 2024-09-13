@@ -58,6 +58,7 @@ export interface NexusGenObjects {
   Query: {};
   WalletPosition: { // root type
     averageEntryPrice: string; // String!
+    pnlPercentage: string; // String!
     positionAmount: string; // String!
     positionValue: string; // String!
     walletAddress: string; // String!
@@ -110,6 +111,7 @@ export interface NexusGenFieldTypes {
   }
   WalletPosition: { // field return type
     averageEntryPrice: string; // String!
+    pnlPercentage: string; // String!
     positionAmount: string; // String!
     positionValue: string; // String!
     walletAddress: string; // String!
@@ -152,6 +154,7 @@ export interface NexusGenFieldTypeNames {
   }
   WalletPosition: { // field return type name
     averageEntryPrice: 'String'
+    pnlPercentage: 'String'
     positionAmount: 'String'
     positionValue: 'String'
     walletAddress: 'String'

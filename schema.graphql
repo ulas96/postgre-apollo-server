@@ -41,6 +41,7 @@ type Query {
 
 type WalletPosition {
   averageEntryPrice: String!
+  pnlPercentage: String!
   positionAmount: String!
   positionValue: String!
   walletAddress: String!

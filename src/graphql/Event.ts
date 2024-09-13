@@ -47,7 +47,8 @@ export const WalletPositionType = objectType({
     t.nonNull.string("walletAddress");
     t.nonNull.string("positionAmount");
     t.nonNull.string("averageEntryPrice");
-    t.nonNull.string("positionValue"); // Add this line
+    t.nonNull.string("positionValue");
+    t.nonNull.string("pnlPercentage"); // Add this line
   },
 });
 
@@ -274,23 +275,35 @@ export const WalletPositionQuery = extendType({
           // Get current XAVAX price
           const currentXAVAXPrice = await getXAVAXPrice();
 
-          // Calculate average entry price and current value for each wallet
-          const resultWithAverageEntryPrice = await Promise.all(result.map(async (row: any) => {
+          // Calculate average entry price, current value, and PNL for each wallet
+          const resultWithCalculations = await Promise.all(result.map(async (row: any) => {
             if (row.transactionHashes && row.amounts) {
               let totalCost = 0;
               for (let i = 0; i < row.transactionHashes.length; i++) {
                 const xavaxPrice = await getXAVAXPriceByTransaction(row.transactionHashes[i]);
                 totalCost += row.amounts[i] * xavaxPrice;
               }
-              const averageEntryPrice = (totalCost / parseFloat(row.positionAmount)).toFixed(6);
+              const averageEntryPrice = parseFloat((totalCost / parseFloat(row.positionAmount)).toFixed(6));
               const positionValue = (parseFloat(row.positionAmount) * currentXAVAXPrice).toFixed(6);
-              return { ...row, averageEntryPrice, positionValue };
+              const pnlPercentage = ((currentXAVAXPrice / averageEntryPrice - 1) * 100).toFixed(2);
+              
+              return { 
+                ...row, 
+                averageEntryPrice: averageEntryPrice.toString(), 
+                positionValue, 
+                pnlPercentage 
+              };
             }
-            return { ...row, averageEntryPrice: '0', positionValue: '0' };
+            return { 
+              ...row, 
+              averageEntryPrice: '0', 
+              positionValue: '0', 
+              pnlPercentage: '0' 
+            };
           }));
 
-          console.log('Wallet Positions Query Result:', resultWithAverageEntryPrice);
-          return resultWithAverageEntryPrice;
+          console.log('Wallet Positions Query Result:', resultWithCalculations);
+          return resultWithCalculations;
         } catch (error) {
           console.error('Error executing wallet positions query:', error);
           throw new Error('Failed to fetch wallet positions');

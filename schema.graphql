@@ -27,7 +27,9 @@ type Event {
 type MintedTokens {
   cost: String
   createdAt: String
+  currentValue: String
   mintedAmount: String
+  pnlPercentage: String
   transactionHash: String
   walletAddress: String
 }
@@ -36,11 +38,21 @@ type Query {
   burnedTokens(walletAddress: String): [BurnedTokens]!
   events(walletAddress: String): [Event!]!
   mintedTokens(walletAddress: String): [MintedTokens]!
-  walletPositions(walletAddress: String): [WalletPosition]!
+  transfers(walletAddress: String!): [Transfer!]!
+  walletPosition(walletAddress: String!): WalletPosition
+}
+
+type Transfer {
+  createdAt: String!
+  from: String!
+  to: String!
+  transactionHash: String!
+  value: String!
 }
 
 type WalletPosition {
   averageEntryPrice: String!
+  currentXAVAXPrice: String!
   pnlPercentage: String!
   positionAmount: String!
   positionValue: String!

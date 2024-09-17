@@ -1,8 +1,17 @@
+/**
+ * @file index.ts
+ * @description Helper functions for XAVAX price calculations and transaction analysis.
+ */
+
 import axios from "axios";
 import { createPublicClient, http, decodeEventLog, parseAbi } from 'viem';
 import { avalanche } from 'viem/chains';
 import { graphqlUrl, wsAVAXContractAddress, xAVAXContractAddress, aUSDContractAddress, xAVAXAbi } from "../constants/index";
 
+/**
+ * @typedef Transfer
+ * @description Represents a token transfer event.
+ */
 interface Transfer {
   from: string;
   to: string;
@@ -11,11 +20,20 @@ interface Transfer {
   timestamp: Date;
 }
 
+/**
+ * @notice Converts wei to ETH
+ * @param wei The amount in wei
+ * @returns The equivalent amount in ETH
+ */
 export const weiToEth = (wei: number) => {
-    return wei/ 10 ** 18;
+    return wei / 10 ** 18;
 }
 
-
+/**
+ * @notice Fetches the AVAX price for a given date
+ * @param date The date for which to fetch the price
+ * @returns The AVAX price or null if not found
+ */
 const getAvaxPrice = async (date: Date) => {
     try {
         // Format the date to YYYY-MM-DDTHH:mm:00.000Z
@@ -44,6 +62,11 @@ const getAvaxPrice = async (date: Date) => {
     }
 }
 
+/**
+ * @notice Retrieves all transfer events from a transaction
+ * @param txHash The transaction hash
+ * @returns An array of Transfer objects
+ */
 const getTransactionTransfers = async (txHash: `0x${string}`): Promise<Transfer[]> => {
     const client = createPublicClient({
         chain: avalanche,
@@ -82,6 +105,11 @@ const getTransactionTransfers = async (txHash: `0x${string}`): Promise<Transfer[
     return transfers;
 }
 
+/**
+ * @notice Fetches the timestamp of a block
+ * @param blockNumber The block number
+ * @returns The timestamp of the block as a Date object
+ */
 const getBlockTimestamp = async (blockNumber: number): Promise<Date> => {
     const client = createPublicClient({
         chain: avalanche,
@@ -92,21 +120,11 @@ const getBlockTimestamp = async (blockNumber: number): Promise<Date> => {
     return new Date(Number(block.timestamp) * 1000); // Convert seconds to milliseconds
 }
 
-// Function to display all transfers
-// export const displayAllTransfers = async (txHash: `0x${string}`) => {
-//     const transfers = await getTransactionTransfers(txHash);
-//     console.log(`Total transfers found: ${transfers.length}`);
-//     for (let i = 0; i < transfers.length; i++) {
-//         const transfer = transfers[i];
-//         console.log(`\nTransfer #${i + 1}:`);
-//         console.log(`From: ${transfer.from}`);
-//         console.log(`To: ${transfer.to}`);
-//         console.log(`Value: ${transfer.value}`);
-//         console.log(`Token Contract: ${transfer.tokenContract}`);
-//         console.log(`Timestamp: ${transfer.timestamp.toISOString()}`);
-//     }
-// }
-
+/**
+ * @notice Calculates the XAVAX price for a given transaction
+ * @param txHash The transaction hash
+ * @returns The calculated XAVAX price or 0 if calculation fails
+ */
 export const getXAVAXPriceByTransaction = async (txHash: `0x${string}`) => {
     try {
         const transfers = await getTransactionTransfers(txHash);
@@ -144,6 +162,10 @@ export const getXAVAXPriceByTransaction = async (txHash: `0x${string}`) => {
     }
 }
 
+/**
+ * @notice Fetches the current XAVAX price
+ * @returns The current XAVAX price in ETH
+ */
 export const getXAVAXPrice = async () => {
     const client = createPublicClient({
         chain: avalanche,

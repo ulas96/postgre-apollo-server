@@ -51,13 +51,23 @@ export interface NexusGenObjects {
   MintedTokens: { // root type
     cost?: string | null; // String
     createdAt?: string | null; // String
+    currentValue?: string | null; // String
     mintedAmount?: string | null; // String
+    pnlPercentage?: string | null; // String
     transactionHash?: string | null; // String
     walletAddress?: string | null; // String
   }
   Query: {};
+  Transfer: { // root type
+    createdAt: string; // String!
+    from: string; // String!
+    to: string; // String!
+    transactionHash: string; // String!
+    value: string; // String!
+  }
   WalletPosition: { // root type
     averageEntryPrice: string; // String!
+    currentXAVAXPrice: string; // String!
     pnlPercentage: string; // String!
     positionAmount: string; // String!
     positionValue: string; // String!
@@ -99,7 +109,9 @@ export interface NexusGenFieldTypes {
   MintedTokens: { // field return type
     cost: string | null; // String
     createdAt: string | null; // String
+    currentValue: string | null; // String
     mintedAmount: string | null; // String
+    pnlPercentage: string | null; // String
     transactionHash: string | null; // String
     walletAddress: string | null; // String
   }
@@ -107,10 +119,19 @@ export interface NexusGenFieldTypes {
     burnedTokens: Array<NexusGenRootTypes['BurnedTokens'] | null>; // [BurnedTokens]!
     events: NexusGenRootTypes['Event'][]; // [Event!]!
     mintedTokens: Array<NexusGenRootTypes['MintedTokens'] | null>; // [MintedTokens]!
-    walletPositions: Array<NexusGenRootTypes['WalletPosition'] | null>; // [WalletPosition]!
+    transfers: NexusGenRootTypes['Transfer'][]; // [Transfer!]!
+    walletPosition: NexusGenRootTypes['WalletPosition'] | null; // WalletPosition
+  }
+  Transfer: { // field return type
+    createdAt: string; // String!
+    from: string; // String!
+    to: string; // String!
+    transactionHash: string; // String!
+    value: string; // String!
   }
   WalletPosition: { // field return type
     averageEntryPrice: string; // String!
+    currentXAVAXPrice: string; // String!
     pnlPercentage: string; // String!
     positionAmount: string; // String!
     positionValue: string; // String!
@@ -142,7 +163,9 @@ export interface NexusGenFieldTypeNames {
   MintedTokens: { // field return type name
     cost: 'String'
     createdAt: 'String'
+    currentValue: 'String'
     mintedAmount: 'String'
+    pnlPercentage: 'String'
     transactionHash: 'String'
     walletAddress: 'String'
   }
@@ -150,10 +173,19 @@ export interface NexusGenFieldTypeNames {
     burnedTokens: 'BurnedTokens'
     events: 'Event'
     mintedTokens: 'MintedTokens'
-    walletPositions: 'WalletPosition'
+    transfers: 'Transfer'
+    walletPosition: 'WalletPosition'
+  }
+  Transfer: { // field return type name
+    createdAt: 'String'
+    from: 'String'
+    to: 'String'
+    transactionHash: 'String'
+    value: 'String'
   }
   WalletPosition: { // field return type name
     averageEntryPrice: 'String'
+    currentXAVAXPrice: 'String'
     pnlPercentage: 'String'
     positionAmount: 'String'
     positionValue: 'String'
@@ -172,8 +204,11 @@ export interface NexusGenArgTypes {
     mintedTokens: { // args
       walletAddress?: string | null; // String
     }
-    walletPositions: { // args
-      walletAddress?: string | null; // String
+    transfers: { // args
+      walletAddress: string; // String!
+    }
+    walletPosition: { // args
+      walletAddress: string; // String!
     }
   }
 }

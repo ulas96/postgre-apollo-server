@@ -6,6 +6,10 @@ import { getTimestamp } from "../helpers/index";
  * @title Event Type
  * @description Represents an event in the system
  */
+/**
+ * @title Event Type
+ * @description Represents an event in the system
+ */
 export const EventType = objectType({
     name: "Event",
     definition(t) {
@@ -37,6 +41,7 @@ export const EventsQuery = extendType({
         t.nonNull.list.nonNull.field("events", {
             type: "Event",
             args: {
+                walletAddress: stringArg(),
                 walletAddress: stringArg(),
             },
             async resolve(_parent, args, context: Context, _info) {

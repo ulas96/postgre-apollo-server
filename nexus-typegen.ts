@@ -28,24 +28,59 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  BurnedTokens: { // root type
+    benefit?: string | null; // String
+    burnedAmount?: string | null; // String
+    timestamp?: number | null; // Float
+    transactionHash?: string | null; // String
+    walletAddress?: string | null; // String
+  }
   Event: { // root type
     appName: string; // String!
     blockNumber: number; // Int!
     contractAddress: string; // String!
-    createdAt: string; // String!
     eventData: string; // String!
     eventName: string; // String!
     eventSignature: string; // String!
     id: number; // Int!
     logIndex: number; // Int!
     parsedData: string[]; // [String!]!
+    timestamp: number; // Float!
     transactionHash: string; // String!
   }
+  LiquidationHistory: { // root type
+    isLiquidated: boolean; // Boolean!
+    lastLiquidation?: number | null; // Int
+  }
   MintedTokens: { // root type
-    totalMinted?: string | null; // String
+    cost?: string | null; // String
+    currentValue?: string | null; // String
+    mintedAmount?: string | null; // String
+    pnlPercentage?: string | null; // String
+    timestamp?: number | null; // Float
+    transactionHash?: string | null; // String
     walletAddress?: string | null; // String
   }
   Query: {};
+  Transfer: { // root type
+    from: string; // String!
+    timestamp: number; // Float!
+    to: string; // String!
+    transactionHash: string; // String!
+    value: string; // String!
+  }
+  WalletPosition: { // root type
+    averageEntryPrice: string; // String!
+    burnedAmount: string; // String!
+    currentXAVAXPrice: string; // String!
+    mintedAmount: string; // String!
+    pnlPercentage: string; // String!
+    positionAmount: string; // String!
+    positionValue: string; // String!
+    transfersIn: string; // String!
+    transfersOut: string; // String!
+    walletAddress: string; // String!
+  }
 }
 
 export interface NexusGenInterfaces {
@@ -59,60 +94,150 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  BurnedTokens: { // field return type
+    benefit: string | null; // String
+    burnedAmount: string | null; // String
+    timestamp: number | null; // Float
+    transactionHash: string | null; // String
+    walletAddress: string | null; // String
+  }
   Event: { // field return type
     appName: string; // String!
     blockNumber: number; // Int!
     contractAddress: string; // String!
-    createdAt: string; // String!
     eventData: string; // String!
     eventName: string; // String!
     eventSignature: string; // String!
     id: number; // Int!
     logIndex: number; // Int!
     parsedData: string[]; // [String!]!
+    timestamp: number; // Float!
     transactionHash: string; // String!
   }
+  LiquidationHistory: { // field return type
+    isLiquidated: boolean; // Boolean!
+    lastLiquidation: number | null; // Int
+  }
   MintedTokens: { // field return type
-    totalMinted: string | null; // String
+    cost: string | null; // String
+    currentValue: string | null; // String
+    mintedAmount: string | null; // String
+    pnlPercentage: string | null; // String
+    timestamp: number | null; // Float
+    transactionHash: string | null; // String
     walletAddress: string | null; // String
   }
   Query: { // field return type
+    burnedTokens: Array<NexusGenRootTypes['BurnedTokens'] | null>; // [BurnedTokens]!
     events: NexusGenRootTypes['Event'][]; // [Event!]!
+    liquidationHistory: NexusGenRootTypes['LiquidationHistory'] | null; // LiquidationHistory
     mintedTokens: Array<NexusGenRootTypes['MintedTokens'] | null>; // [MintedTokens]!
+    transfers: NexusGenRootTypes['Transfer'][]; // [Transfer!]!
+    walletPosition: NexusGenRootTypes['WalletPosition'] | null; // WalletPosition
+  }
+  Transfer: { // field return type
+    from: string; // String!
+    timestamp: number; // Float!
+    to: string; // String!
+    transactionHash: string; // String!
+    value: string; // String!
+  }
+  WalletPosition: { // field return type
+    averageEntryPrice: string; // String!
+    burnedAmount: string; // String!
+    currentXAVAXPrice: string; // String!
+    mintedAmount: string; // String!
+    pnlPercentage: string; // String!
+    positionAmount: string; // String!
+    positionValue: string; // String!
+    transfersIn: string; // String!
+    transfersOut: string; // String!
+    walletAddress: string; // String!
   }
 }
 
 export interface NexusGenFieldTypeNames {
+  BurnedTokens: { // field return type name
+    benefit: 'String'
+    burnedAmount: 'String'
+    timestamp: 'Float'
+    transactionHash: 'String'
+    walletAddress: 'String'
+  }
   Event: { // field return type name
     appName: 'String'
     blockNumber: 'Int'
     contractAddress: 'String'
-    createdAt: 'String'
     eventData: 'String'
     eventName: 'String'
     eventSignature: 'String'
     id: 'Int'
     logIndex: 'Int'
     parsedData: 'String'
+    timestamp: 'Float'
     transactionHash: 'String'
   }
+  LiquidationHistory: { // field return type name
+    isLiquidated: 'Boolean'
+    lastLiquidation: 'Int'
+  }
   MintedTokens: { // field return type name
-    totalMinted: 'String'
+    cost: 'String'
+    currentValue: 'String'
+    mintedAmount: 'String'
+    pnlPercentage: 'String'
+    timestamp: 'Float'
+    transactionHash: 'String'
     walletAddress: 'String'
   }
   Query: { // field return type name
+    burnedTokens: 'BurnedTokens'
     events: 'Event'
+    liquidationHistory: 'LiquidationHistory'
     mintedTokens: 'MintedTokens'
+    transfers: 'Transfer'
+    walletPosition: 'WalletPosition'
+  }
+  Transfer: { // field return type name
+    from: 'String'
+    timestamp: 'Float'
+    to: 'String'
+    transactionHash: 'String'
+    value: 'String'
+  }
+  WalletPosition: { // field return type name
+    averageEntryPrice: 'String'
+    burnedAmount: 'String'
+    currentXAVAXPrice: 'String'
+    mintedAmount: 'String'
+    pnlPercentage: 'String'
+    positionAmount: 'String'
+    positionValue: 'String'
+    transfersIn: 'String'
+    transfersOut: 'String'
+    walletAddress: 'String'
   }
 }
 
 export interface NexusGenArgTypes {
   Query: {
+    burnedTokens: { // args
+      walletAddress?: string | null; // String
+    }
     events: { // args
       walletAddress?: string | null; // String
     }
+    liquidationHistory: { // args
+      walletAddress: string; // String!
+    }
     mintedTokens: { // args
       walletAddress?: string | null; // String
+    }
+    transfers: { // args
+      walletAddress: string; // String!
+    }
+    walletPosition: { // args
+      walletAddress: string; // String!
     }
   }
 }

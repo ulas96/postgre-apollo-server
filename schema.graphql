@@ -2,26 +2,69 @@
 ### Do not make changes to this file directly
 
 
+type BurnedTokens {
+  benefit: String
+  burnedAmount: String
+  timestamp: Float
+  transactionHash: String
+  walletAddress: String
+}
+
 type Event {
   appName: String!
   blockNumber: Int!
   contractAddress: String!
-  createdAt: String!
   eventData: String!
   eventName: String!
   eventSignature: String!
   id: Int!
   logIndex: Int!
   parsedData: [String!]!
+  timestamp: Float!
   transactionHash: String!
 }
 
+type LiquidationHistory {
+  isLiquidated: Boolean!
+  lastLiquidation: Int
+}
+
 type MintedTokens {
-  totalMinted: String
+  cost: String
+  currentValue: String
+  mintedAmount: String
+  pnlPercentage: String
+  timestamp: Float
+  transactionHash: String
   walletAddress: String
 }
 
 type Query {
+  burnedTokens(walletAddress: String): [BurnedTokens]!
   events(walletAddress: String): [Event!]!
+  liquidationHistory(walletAddress: String!): LiquidationHistory
   mintedTokens(walletAddress: String): [MintedTokens]!
+  transfers(walletAddress: String!): [Transfer!]!
+  walletPosition(walletAddress: String!): WalletPosition
+}
+
+type Transfer {
+  from: String!
+  timestamp: Float!
+  to: String!
+  transactionHash: String!
+  value: String!
+}
+
+type WalletPosition {
+  averageEntryPrice: String!
+  burnedAmount: String!
+  currentXAVAXPrice: String!
+  mintedAmount: String!
+  pnlPercentage: String!
+  positionAmount: String!
+  positionValue: String!
+  transfersIn: String!
+  transfersOut: String!
+  walletAddress: String!
 }

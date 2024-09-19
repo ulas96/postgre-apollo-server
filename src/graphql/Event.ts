@@ -42,7 +42,7 @@ export const EventsQuery = extendType({
             type: "Event",
             args: {
                 walletAddress: stringArg(),
-                walletAddress: stringArg(),
+
             },
             async resolve(_parent, args, context: Context, _info) {
                 const { connection } = context;

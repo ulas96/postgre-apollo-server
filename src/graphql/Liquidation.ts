@@ -72,7 +72,7 @@ export const LiquidationHistoryQuery = extendType({
   
           try {
             const result = await connection.query(query, [walletAddress]);
-            console.log('Liquidation History Query Result:', result);
+            //console.log('Liquidation History Query Result:', result);
             
             if (result.length === 0) {
               return { isLiquidated: false, lastLiquidation: null };
@@ -83,7 +83,7 @@ export const LiquidationHistoryQuery = extendType({
               lastLiquidation: result[0].isLiquidated ? result[0].lastLiquidation : null,
             };
           } catch (error) {
-            console.error('Error executing liquidation history query:', error);
+            //console.error('Error executing liquidation history query:', error);
             throw new Error('Failed to fetch liquidation history');
           }
         },

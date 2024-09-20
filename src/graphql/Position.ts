@@ -161,26 +161,26 @@ export const WalletPositionQuery = extendType({
           `;
   
           try {
-            console.log('Executing wallet position query for wallet:', walletAddress);
+            //console.log('Executing wallet position query for wallet:', walletAddress);
             let result;
             if (lastLiquidationBlock) {
               result = await connection.query(query, [walletAddress, lastLiquidationBlock]);
             } else {
               result = await connection.query(query, [walletAddress]);
             }
-            console.log('Query result:', result);
+            //console.log('Query result:', result);
   
             if (result.length === 0) {
-              console.log('No position found for wallet:', walletAddress);
+              //console.log('No position found for wallet:', walletAddress);
               return null; // Return null if no position found for the wallet
             }
   
             const row = result[0];
-            console.log('Row data:', row);
+            //console.log('Row data:', row);
   
             // Get current XAVAX price
             const currentXAVAXPrice = await getXAVAXPrice();
-            console.log('Current XAVAX price:', currentXAVAXPrice);
+            //console.log('Current XAVAX price:', currentXAVAXPrice);
   
             // Check if position amount is 0
             if (parseFloat(row.positionAmount) < 0.1) {
@@ -221,9 +221,9 @@ export const WalletPositionQuery = extendType({
               currentXAVAXPrice: currentXAVAXPrice.toString()
             };
           } catch (error) {
-            console.error('Error executing wallet position query:', error);
-            console.error('Error details:', error.message);
-            console.error('Error stack:', error.stack);
+            //console.error('Error executing wallet position query:', error);
+            //console.error('Error details:', error.message);
+            //console.error('Error stack:', error.stack);
             throw new Error(`Failed to fetch wallet position: ${error.message}`);
           }
         },

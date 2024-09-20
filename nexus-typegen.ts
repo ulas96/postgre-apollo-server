@@ -31,6 +31,7 @@ export interface NexusGenObjects {
   BurnedTokens: { // root type
     benefit?: string | null; // String
     burnedAmount?: string | null; // String
+    createdAt?: string | null; // String
     timestamp?: number | null; // Float
     transactionHash?: string | null; // String
     walletAddress?: string | null; // String
@@ -39,6 +40,7 @@ export interface NexusGenObjects {
     appName: string; // String!
     blockNumber: number; // Int!
     contractAddress: string; // String!
+    createdAt: string; // String!
     eventData: string; // String!
     eventName: string; // String!
     eventSignature: string; // String!
@@ -54,6 +56,7 @@ export interface NexusGenObjects {
   }
   MintedTokens: { // root type
     cost?: string | null; // String
+    createdAt?: string | null; // String
     currentValue?: string | null; // String
     mintedAmount?: string | null; // String
     pnlPercentage?: string | null; // String
@@ -63,6 +66,7 @@ export interface NexusGenObjects {
   }
   Query: {};
   Transfer: { // root type
+    createdAt: string; // String!
     from: string; // String!
     timestamp: number; // Float!
     to: string; // String!
@@ -97,6 +101,7 @@ export interface NexusGenFieldTypes {
   BurnedTokens: { // field return type
     benefit: string | null; // String
     burnedAmount: string | null; // String
+    createdAt: string | null; // String
     timestamp: number | null; // Float
     transactionHash: string | null; // String
     walletAddress: string | null; // String
@@ -105,6 +110,7 @@ export interface NexusGenFieldTypes {
     appName: string; // String!
     blockNumber: number; // Int!
     contractAddress: string; // String!
+    createdAt: string; // String!
     eventData: string; // String!
     eventName: string; // String!
     eventSignature: string; // String!
@@ -120,6 +126,7 @@ export interface NexusGenFieldTypes {
   }
   MintedTokens: { // field return type
     cost: string | null; // String
+    createdAt: string | null; // String
     currentValue: string | null; // String
     mintedAmount: string | null; // String
     pnlPercentage: string | null; // String
@@ -136,6 +143,7 @@ export interface NexusGenFieldTypes {
     walletPosition: NexusGenRootTypes['WalletPosition'] | null; // WalletPosition
   }
   Transfer: { // field return type
+    createdAt: string; // String!
     from: string; // String!
     timestamp: number; // Float!
     to: string; // String!
@@ -160,6 +168,7 @@ export interface NexusGenFieldTypeNames {
   BurnedTokens: { // field return type name
     benefit: 'String'
     burnedAmount: 'String'
+    createdAt: 'String'
     timestamp: 'Float'
     transactionHash: 'String'
     walletAddress: 'String'
@@ -168,6 +177,7 @@ export interface NexusGenFieldTypeNames {
     appName: 'String'
     blockNumber: 'Int'
     contractAddress: 'String'
+    createdAt: 'String'
     eventData: 'String'
     eventName: 'String'
     eventSignature: 'String'
@@ -183,6 +193,7 @@ export interface NexusGenFieldTypeNames {
   }
   MintedTokens: { // field return type name
     cost: 'String'
+    createdAt: 'String'
     currentValue: 'String'
     mintedAmount: 'String'
     pnlPercentage: 'String'
@@ -199,6 +210,7 @@ export interface NexusGenFieldTypeNames {
     walletPosition: 'WalletPosition'
   }
   Transfer: { // field return type name
+    createdAt: 'String'
     from: 'String'
     timestamp: 'Float'
     to: 'String'

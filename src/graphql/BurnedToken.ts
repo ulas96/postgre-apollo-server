@@ -14,8 +14,9 @@ export const BurnedTokensType = objectType({
       t.string("transactionHash");
       t.string("walletAddress");  
       t.string("burnedAmount");  
-      t.float("timestamp");
       t.string("benefit");  
+      t.string("createdAt");    
+      t.float("timestamp");
     },
   });
 
@@ -41,6 +42,7 @@ export const BurnedTokensQuery = extendType({
             let query = `
               SELECT
                 "transactionHash",
+                "createdAt",
                 "parsedData"[1] as "walletAddress",
                 SUM(CAST("parsedData"[3] AS DECIMAL(65,0)) / 1000000000000000000)::TEXT as "burnedAmount",
                 MAX("blockNumber") as "blockNumber"
@@ -55,7 +57,7 @@ export const BurnedTokensQuery = extendType({
             }
 
             query += `
-              GROUP BY "transactionHash", "parsedData"[1]
+              GROUP BY "transactionHash", "createdAt", "parsedData"[1]
               ORDER BY MAX("blockNumber") DESC
             `;
 

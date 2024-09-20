@@ -5,6 +5,7 @@
 type BurnedTokens {
   benefit: String
   burnedAmount: String
+  createdAt: String
   timestamp: Float
   transactionHash: String
   walletAddress: String
@@ -14,6 +15,7 @@ type Event {
   appName: String!
   blockNumber: Int!
   contractAddress: String!
+  createdAt: String!
   eventData: String!
   eventName: String!
   eventSignature: String!
@@ -31,6 +33,7 @@ type LiquidationHistory {
 
 type MintedTokens {
   cost: String
+  createdAt: String
   currentValue: String
   mintedAmount: String
   pnlPercentage: String
@@ -49,6 +52,7 @@ type Query {
 }
 
 type Transfer {
+  createdAt: String!
   from: String!
   timestamp: Float!
   to: String!

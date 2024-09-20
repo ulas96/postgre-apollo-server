@@ -23,6 +23,7 @@ export const EventType = objectType({
         t.nonNull.list.nonNull.string("parsedData"),
         t.nonNull.string("contractAddress"),
         t.nonNull.string("appName"),
+        t.nonNull.string("createdAt"),
         t.nonNull.float("timestamp")
     }
 });
@@ -73,10 +74,10 @@ export const EventsQuery = extendType({
                         return { ...event, timestamp: timestamp.getTime() };
                     }));
 
-                    console.log('Unique Events Query Result:', eventsWithTimestamp);
+                    //console.log('Unique Events Query Result:', eventsWithTimestamp);
                     return eventsWithTimestamp;
                 } catch (error) {
-                    console.error('Error executing unique events query:', error);
+                    //console.error('Error executing unique events query:', error);
                     throw new Error('Failed to fetch unique events');
                 }
             }

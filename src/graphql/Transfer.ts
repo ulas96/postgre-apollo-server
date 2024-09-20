@@ -13,6 +13,7 @@ export const TransferType = objectType({
       t.nonNull.string("from");
       t.nonNull.string("to");
       t.nonNull.string("value");
+      t.nonNull.string("createdAt");
       t.nonNull.float("timestamp");
     },
   });
@@ -38,6 +39,7 @@ export const TransfersQuery = extendType({
           const query = `
             SELECT DISTINCT ON ("transactionHash")
               "transactionHash",
+              "createdAt",
               "parsedData"[1] as "from",
               "parsedData"[2] as "to",
               (CAST("parsedData"[3] AS DECIMAL(65,0)) / 1000000000000000000)::TEXT as "value",
@@ -62,10 +64,10 @@ export const TransfersQuery = extendType({
               return { ...transfer, timestamp: timestamp.getTime() };
             }));
   
-            console.log('Transfers Query Result:', transfersWithTimestamp);
+            //console.log('Transfers Query Result:', transfersWithTimestamp);
             return transfersWithTimestamp;
           } catch (error) {
-            console.error('Error executing transfers query:', error);
+            //console.error('Error executing transfers query:', error);
             throw new Error('Failed to fetch transfers');
           }
         },

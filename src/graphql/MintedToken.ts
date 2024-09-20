@@ -12,11 +12,12 @@ export const MintedTokensType = objectType({
     definition(t) {
     t.string("transactionHash");
       t.string("walletAddress");  
-      t.string("mintedAmount"); 
-      t.float("timestamp");
+      t.string("mintedAmount");
       t.string("cost");
       t.string("currentValue");
       t.string("pnlPercentage");
+      t.string("createdAt"); 
+      t.float("timestamp");
     },
   });
 
@@ -42,6 +43,7 @@ export const MintedTokensQuery = extendType({
             let query = `
               SELECT 
                 "transactionHash",
+                "createdAt",
                 "parsedData"[2] as "walletAddress",
                 SUM(CAST("parsedData"[3] AS DECIMAL(65,0)) / 1000000000000000000)::TEXT as "mintedAmount",
                 MAX("blockNumber") as "blockNumber"
@@ -56,7 +58,7 @@ export const MintedTokensQuery = extendType({
             }
 
             query += `
-              GROUP BY "transactionHash", "parsedData"[2]
+              GROUP BY "transactionHash", "createdAt", "parsedData"[2]
               ORDER BY MAX("blockNumber") DESC
             `;
 
@@ -82,15 +84,15 @@ export const MintedTokensQuery = extendType({
                         const timestamp = await getTimestamp(row.blockNumber);
                         return { ...row, cost, currentValue, pnlPercentage, timestamp: timestamp.getTime() };
                     } catch (error) {
-                        console.error(`Error calculating PNL for transaction ${row.transactionHash}:`, error);
+                        //console.error(`Error calculating PNL for transaction ${row.transactionHash}:`, error);
                         return { ...row, cost: '0', currentValue: '0', pnlPercentage: '0', timestamp: 0 };
                     }
                 }));
 
-                console.log('Minted Tokens Query Result:', resultWithPNL);
+                //console.log('Minted Tokens Query Result:', resultWithPNL);
                 return resultWithPNL;
             } catch (error) {
-                console.error('Error executing minted tokens query:', error);
+                //console.error('Error executing minted tokens query:', error);
                 throw new Error('Failed to fetch minted tokens');
             }
         },

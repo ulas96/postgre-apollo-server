@@ -1,4 +1,4 @@
-export const graphqlUrl = "http://34.90.72.213:5151";
+
 
 export const wsAVAXContractAddress = "0x7aa5c727270c7e1642af898e0ea5b85a094c17a1";
 

@@ -4,9 +4,12 @@
  */
 
 import axios from "axios";
+import dotenv from "dotenv";
 import { createPublicClient, http, decodeEventLog, parseAbi } from 'viem';
 import { avalanche } from 'viem/chains';
-import { graphqlUrl, wsAVAXContractAddress, xAVAXContractAddress, aUSDContractAddress, xAVAXAbi } from "../constants/index";
+import { wsAVAXContractAddress, xAVAXContractAddress, aUSDContractAddress, xAVAXAbi } from "../constants/index";
+
+dotenv.config();
 
 /**
  * @typedef Transfer
@@ -48,7 +51,7 @@ const getAvaxPrice = async (date: Date) => {
             }
         `;
 
-        const response = await axios.post(graphqlUrl, { query });
+        const response = await axios.post(process.env.GRAPHQL_URL as string, { query });
         
         if (response.data && response.data.data && response.data.data.prices && response.data.data.prices.length > 0) {
             return parseFloat(response.data.data.prices[0].price);

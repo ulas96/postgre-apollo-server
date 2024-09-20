@@ -94,12 +94,10 @@ const getTransactionTransfers = async (txHash: `0x${string}`): Promise<Transfer[
                     to: decodedLog.args.to,
                     value: decodedLog.args.value.toString(),
                     tokenContract: log.address,
-                    timestamp: await getBlockTimestamp(Number(log.blockNumber))
+                    timestamp: await getTimestamp(Number(log.blockNumber))
                 });
             }
-        } catch (error) {
-            // This log is not a Transfer event, skip it
-        }
+        } catch (error) {}
     }
 
     return transfers;
@@ -110,14 +108,14 @@ const getTransactionTransfers = async (txHash: `0x${string}`): Promise<Transfer[
  * @param blockNumber The block number
  * @returns The timestamp of the block as a Date object
  */
-const getBlockTimestamp = async (blockNumber: number): Promise<Date> => {
+export const getTimestamp = async (blockNumber: number) => {
     const client = createPublicClient({
         chain: avalanche,
         transport: http(),
     });
 
     const block = await client.getBlock({ blockNumber: BigInt(blockNumber) });
-    return new Date(Number(block.timestamp) * 1000); // Convert seconds to milliseconds
+    return new Date(Number(block.timestamp) * 1000);
 }
 
 /**
@@ -179,14 +177,4 @@ export const getXAVAXPrice = async () => {
     });
 
     return weiToEth(Number(nav));
-}
-
-export const getTimestamp = async (blockNumber: number) => {
-    const client = createPublicClient({
-        chain: avalanche,
-        transport: http(),
-    });
-
-    const block = await client.getBlock({ blockNumber: BigInt(blockNumber) });
-    return new Date(Number(block.timestamp) * 1000); // Convert seconds to milliseconds
 }

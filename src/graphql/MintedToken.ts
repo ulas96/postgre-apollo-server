@@ -50,30 +50,17 @@ export const MintedTokensQuery = extendType({
               FROM event
               WHERE 
                 "eventName" = 'Transfer' AND
-                "parsedData"[1] = '0x0000000000000000000000000000000000000000'
+                "parsedData"[1] = '0x0000000000000000000000000000000000000000' AND
+                "parsedData"[2] = $1
+                GROUP BY "transactionHash", "createdAt", "parsedData"[2]
+                ORDER BY MAX("blockNumber") DESC
             `;
 
-            if (walletAddress) {
-                query += ` AND "parsedData"[2] = $1`;
-            }
-
-            query += `
-              GROUP BY "transactionHash", "createdAt", "parsedData"[2]
-              ORDER BY MAX("blockNumber") DESC
-            `;
 
             try {
-                let result;
-                if (walletAddress) {
-                    result = await connection.query(query, [walletAddress]);
-                } else {
-                    result = await connection.query(query);
-
-                }
-
+                const result = await connection.query(query, [walletAddress]);
                 // Get current XAVAX price
                 const currentXAVAXPrice = await getXAVAXPrice();
-
                 // Calculate cost, current value, and PNL for each transaction
                 const resultWithPNL = await Promise.all(result.map(async (row: any) => {
                     try {
@@ -88,7 +75,6 @@ export const MintedTokensQuery = extendType({
                         return { ...row, cost: '0', currentValue: '0', pnlPercentage: '0', timestamp: 0 };
                     }
                 }));
-
                 //console.log('Minted Tokens Query Result:', resultWithPNL);
                 return resultWithPNL;
             } catch (error) {

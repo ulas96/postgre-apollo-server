@@ -43,7 +43,6 @@ export const EventsQuery = extendType({
             type: "Event",
             args: {
                 walletAddress: nonNull(stringArg()),
-
             },
             async resolve(_parent, args, context: Context, _info) {
                 const { connection } = context;
@@ -52,23 +51,12 @@ export const EventsQuery = extendType({
                 let query = `
                     SELECT DISTINCT ON ("transactionHash") *
                     FROM event
+                    WHERE "parsedData"[1] = $1 OR "parsedData"[2] = $1
+                    ORDER BY "transactionHash", "blockNumber" DESC
                 `;
 
-                if (walletAddress) {
-                    query += ` WHERE "parsedData"[1] = $1 OR "parsedData"[2] = $1`;
-                }
-
-                query += ` ORDER BY "transactionHash", "blockNumber" DESC`;
-
                 try {
-                    let result;
-                    if (walletAddress) {
-                        result = await connection.query(query, [walletAddress]);
-                    } else {
-                        result = await connection.query(query);
-                    }
-
-                    // Calculate timestamp for each event
+                    let result = await connection.query(query, [walletAddress]);
                     const eventsWithTimestamp = await Promise.all(result.map(async (event: any) => {
                         const timestamp = await getTimestamp(event.blockNumber);
                         return { ...event, timestamp: timestamp.getTime() };

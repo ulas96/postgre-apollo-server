@@ -73,11 +73,9 @@ export const LiquidationHistoryQuery = extendType({
           try {
             const result = await connection.query(query, [walletAddress]);
             //console.log('Liquidation History Query Result:', result);
-            
             if (result.length === 0) {
               return { isLiquidated: false, lastLiquidation: null };
             }
-  
             return {
               isLiquidated: result[0].isLiquidated,
               lastLiquidation: result[0].isLiquidated ? result[0].lastLiquidation : null,

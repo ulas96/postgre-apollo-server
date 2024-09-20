@@ -49,27 +49,14 @@ export const BurnedTokensQuery = extendType({
               FROM event
               WHERE 
                 ("parsedData"[2] = '0x0000000000000000000000000000000000000000' OR 
-                "parsedData"[2] = '0x013b34DBA0d6c9810F530534507144a8646E3273')
-            `;
-
-            if (walletAddress) {
-                query += ` AND "parsedData"[1] = $1`;
-            }
-
-            query += `
-              GROUP BY "transactionHash", "createdAt", "parsedData"[1]
-              ORDER BY MAX("blockNumber") DESC
+                "parsedData"[2] = '0x013b34DBA0d6c9810F530534507144a8646E3273') AND
+                "parsedData"[1] = $1
+                GROUP BY "transactionHash", "createdAt", "parsedData"[1]
+                ORDER BY MAX("blockNumber") DESC
             `;
 
             try {
-                let result;
-                if (walletAddress) {
-                    result = await connection.query(query, [walletAddress]);
-                } else {
-                    result = await connection.query(query);
-                }
-
-                // Calculate benefit for each transaction
+                const result = await connection.query(query, [walletAddress]);
                 const resultWithBenefit = await Promise.all(result.map(async (row: any) => {
                     try {
                         const xavaxCost = await getXAVAXPriceByTransaction(row.transactionHash);
@@ -81,11 +68,10 @@ export const BurnedTokensQuery = extendType({
                         return { ...row, benefit: '0', timestamp: 0 };
                     }
                 }));
-
-                console.log('Burned Tokens Query Result:', resultWithBenefit);
+                //console.log('Burned Tokens Query Result:', resultWithBenefit);
                 return resultWithBenefit;
             } catch (error) {
-                console.error('Error executing burned tokens query:', error);
+                //console.error('Error executing burned tokens query:', error);
                 throw new Error('Failed to fetch burned tokens');
             }
         },

@@ -6,6 +6,7 @@ type BurnedTokens {
   benefit: String
   burnedAmount: String
   createdAt: String
+  timestamp: Float
   transactionHash: String
   walletAddress: String
 }
@@ -21,7 +22,13 @@ type Event {
   id: Int!
   logIndex: Int!
   parsedData: [String!]!
+  timestamp: Float!
   transactionHash: String!
+}
+
+type LiquidationHistory {
+  isLiquidated: Boolean!
+  lastLiquidation: Int
 }
 
 type MintedTokens {
@@ -30,14 +37,16 @@ type MintedTokens {
   currentValue: String
   mintedAmount: String
   pnlPercentage: String
+  timestamp: Float
   transactionHash: String
   walletAddress: String
 }
 
 type Query {
-  burnedTokens(walletAddress: String): [BurnedTokens]!
-  events(walletAddress: String): [Event!]!
-  mintedTokens(walletAddress: String): [MintedTokens]!
+  burnedTokens(walletAddress: String!): [BurnedTokens]!
+  events(walletAddress: String!): [Event!]!
+  liquidationHistory(walletAddress: String!): LiquidationHistory
+  mintedTokens(walletAddress: String!): [MintedTokens]!
   transfers(walletAddress: String!): [Transfer!]!
   walletPosition(walletAddress: String!): WalletPosition
 }
@@ -45,6 +54,7 @@ type Query {
 type Transfer {
   createdAt: String!
   from: String!
+  timestamp: Float!
   to: String!
   transactionHash: String!
   value: String!
@@ -52,9 +62,13 @@ type Transfer {
 
 type WalletPosition {
   averageEntryPrice: String!
+  burnedAmount: String!
   currentXAVAXPrice: String!
+  mintedAmount: String!
   pnlPercentage: String!
   positionAmount: String!
   positionValue: String!
+  transfersIn: String!
+  transfersOut: String!
   walletAddress: String!
 }

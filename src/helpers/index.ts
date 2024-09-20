@@ -4,9 +4,12 @@
  */
 
 import axios from "axios";
+import dotenv from "dotenv";
 import { createPublicClient, http, decodeEventLog, parseAbi } from 'viem';
 import { avalanche } from 'viem/chains';
-import { graphqlUrl, wsAVAXContractAddress, xAVAXContractAddress, aUSDContractAddress, xAVAXAbi } from "../constants/index";
+import { wsAVAXContractAddress, xAVAXContractAddress, aUSDContractAddress, xAVAXAbi } from "../constants/index";
+
+dotenv.config();
 
 /**
  * @typedef Transfer
@@ -48,16 +51,16 @@ const getAvaxPrice = async (date: Date) => {
             }
         `;
 
-        const response = await axios.post(graphqlUrl, { query });
+        const response = await axios.post(process.env.GRAPHQL_URL as string, { query });
         
         if (response.data && response.data.data && response.data.data.prices && response.data.data.prices.length > 0) {
             return parseFloat(response.data.data.prices[0].price);
         } else {
-            console.error(`No price data found for date: ${formattedDate}`);
+            //console.error(`No price data found for date: ${formattedDate}`);
             return null;
         }
     } catch (error) {
-        console.error(`Error fetching AVAX price for date ${date}:`, error);
+        //console.error(`Error fetching AVAX price for date ${date}:`, error);
         return null;
     }
 }
@@ -94,12 +97,10 @@ const getTransactionTransfers = async (txHash: `0x${string}`): Promise<Transfer[
                     to: decodedLog.args.to,
                     value: decodedLog.args.value.toString(),
                     tokenContract: log.address,
-                    timestamp: await getBlockTimestamp(Number(log.blockNumber))
+                    timestamp: await getTimestamp(Number(log.blockNumber))
                 });
             }
-        } catch (error) {
-            // This log is not a Transfer event, skip it
-        }
+        } catch (error) {}
     }
 
     return transfers;
@@ -110,14 +111,14 @@ const getTransactionTransfers = async (txHash: `0x${string}`): Promise<Transfer[
  * @param blockNumber The block number
  * @returns The timestamp of the block as a Date object
  */
-const getBlockTimestamp = async (blockNumber: number): Promise<Date> => {
+export const getTimestamp = async (blockNumber: number) => {
     const client = createPublicClient({
         chain: avalanche,
         transport: http(),
     });
 
     const block = await client.getBlock({ blockNumber: BigInt(blockNumber) });
-    return new Date(Number(block.timestamp) * 1000); // Convert seconds to milliseconds
+    return new Date(Number(block.timestamp) * 1000);
 }
 
 /**
@@ -130,7 +131,7 @@ export const getXAVAXPriceByTransaction = async (txHash: `0x${string}`) => {
         const transfers = await getTransactionTransfers(txHash);
 
         if (transfers.length === 0) {
-            console.error(`No transfers found for transaction: ${txHash}`);
+            //console.error(`No transfers found for transaction: ${txHash}`);
             return 0;
         }
 
@@ -138,14 +139,14 @@ export const getXAVAXPriceByTransaction = async (txHash: `0x${string}`) => {
         const xAVAXTransfer = transfers.find(transfer => transfer.tokenContract === xAVAXContractAddress.toLowerCase());
 
         if (!wsAVAXTransfer || !xAVAXTransfer) {
-            console.error(`Missing required transfers for transaction: ${txHash}`);
+            //console.error(`Missing required transfers for transaction: ${txHash}`);
             return 0;
         }
 
         const wsAVAXPrice = await getAvaxPrice(wsAVAXTransfer.timestamp);
 
         if (wsAVAXPrice === null) {
-            console.error(`Failed to get AVAX price for transaction: ${txHash}`);
+            //console.error(`Failed to get AVAX price for transaction: ${txHash}`);
             return 0;
         }
 
@@ -157,7 +158,7 @@ export const getXAVAXPriceByTransaction = async (txHash: `0x${string}`) => {
 
         return price;
     } catch (error) {
-        console.error(`Error calculating xAVAX price for transaction ${txHash}:`, error);
+        //console.error(`Error calculating xAVAX price for transaction ${txHash}:`, error);
         return 0;
     }
 }

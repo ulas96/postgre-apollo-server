@@ -39,6 +39,7 @@ export interface NexusGenObjects {
     id: number; // Int!
     logIndex: number; // Int!
     parsedData: string[]; // [String!]!
+    timestamp: number; // Float!
     transactionHash: string; // String!
   }
   MintedTokens: { // root type
@@ -78,6 +79,7 @@ export interface NexusGenFieldTypes {
     id: number; // Int!
     logIndex: number; // Int!
     parsedData: string[]; // [String!]!
+    timestamp: number; // Float!
     transactionHash: string; // String!
   }
   MintedTokens: { // field return type
@@ -112,6 +114,7 @@ export interface NexusGenFieldTypeNames {
     id: 'Int'
     logIndex: 'Int'
     parsedData: 'String'
+    timestamp: 'Float'
     transactionHash: 'String'
   }
   MintedTokens: { // field return type name
@@ -137,16 +140,16 @@ export interface NexusGenFieldTypeNames {
 export interface NexusGenArgTypes {
   Query: {
     events: { // args
-      walletAddress?: string | null; // String
+      walletAddress: string; // String!
     }
     mintedTokens: { // args
-      walletAddress?: string | null; // String
+      walletAddress: string; // String!
     }
     poolDeposits: { // args
-      walletAddress?: string | null; // String
+      walletAddress: string; // String!
     }
     poolUnlocks: { // args
-      walletAddress?: string | null; // String
+      walletAddress: string; // String!
     }
   }
 }

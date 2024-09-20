@@ -1,4 +1,4 @@
-import { extendType, objectType, stringArg } from "nexus"; 
+import { extendType, objectType, stringArg, nonNull } from "nexus"; 
 import { Context } from "../types/Context";
 import { getTimestamp } from "../helpers/index";
 
@@ -42,7 +42,7 @@ export const EventsQuery = extendType({
         t.nonNull.list.nonNull.field("events", {
             type: "Event",
             args: {
-                walletAddress: stringArg(),
+                walletAddress: nonNull(stringArg()),
 
             },
             async resolve(_parent, args, context: Context, _info) {

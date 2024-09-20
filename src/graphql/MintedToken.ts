@@ -1,4 +1,4 @@
-import { extendType, objectType, stringArg } from "nexus"; 
+import { extendType, objectType, stringArg, nonNull } from "nexus"; 
 import { Context } from "../types/Context";
 import { getXAVAXPriceByTransaction, getXAVAXPrice, getTimestamp } from "../helpers/index";
 
@@ -34,7 +34,7 @@ export const MintedTokensQuery = extendType({
       t.nonNull.list.field("mintedTokens", {
         type: "MintedTokens",
         args: {
-            walletAddress: stringArg(),
+            walletAddress: nonNull(stringArg()),
         },
         async resolve(_parent, args, context: Context, _info) {
             const { connection } = context;

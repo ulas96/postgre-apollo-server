@@ -234,16 +234,16 @@ export interface NexusGenFieldTypeNames {
 export interface NexusGenArgTypes {
   Query: {
     burnedTokens: { // args
-      walletAddress?: string | null; // String
+      walletAddress: string; // String!
     }
     events: { // args
-      walletAddress?: string | null; // String
+      walletAddress: string; // String!
     }
     liquidationHistory: { // args
       walletAddress: string; // String!
     }
     mintedTokens: { // args
-      walletAddress?: string | null; // String
+      walletAddress: string; // String!
     }
     transfers: { // args
       walletAddress: string; // String!

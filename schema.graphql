@@ -2,73 +2,60 @@
 ### Do not make changes to this file directly
 
 
-type BurnedTokens {
-  benefit: String
-  burnedAmount: String
+type Boost {
   createdAt: String
-  timestamp: Float
-  transactionHash: String
-  walletAddress: String
+  firstCohort: Boolean
+  ptpCohort: Boolean
+  secondCohort: Boolean
+  sjFriend: Boolean
+  tasks75: Boolean
+  tasks100: Boolean
+  thirdCohort: Boolean
+  totalBonus: Int
+  userAddress: String!
 }
 
-type Event {
-  appName: String!
-  blockNumber: Int!
-  contractAddress: String!
-  createdAt: String!
-  eventData: String!
-  eventName: String!
-  eventSignature: String!
-  id: Int!
-  logIndex: Int!
-  parsedData: [String!]!
-  timestamp: Float!
-  transactionHash: String!
-}
-
-type LiquidationHistory {
-  isLiquidated: Boolean!
-  lastLiquidation: Int
-}
-
-type MintedTokens {
-  cost: String
+type Main {
+  bonus: Float
   createdAt: String
-  currentValue: String
-  mintedAmount: String
-  pnlPercentage: String
-  timestamp: Float
-  transactionHash: String
-  walletAddress: String
+  firstEpochPoints: Float
+  holdAUSD: Float
+  holdXAVAX: Float
+  pangolin: Float
+  pharaoh: Float
+  rebPool: Float
+  referral: String
+  referralUsed: String
+  totalPoints: Float!
+  traderJoe: Float
+  userAddress: String!
+}
+
+type Mutation {
+  createBoost(createdAt: String, firstCohort: Boolean, ptpCohort: Boolean, secondCohort: Boolean, sjFriend: Boolean, tasks75: Boolean, tasks100: Boolean, thirdCohort: Boolean, totalBonus: Int, userAddress: String!): Boost!
+  createMain(bonus: Float, createdAt: String, firstEpochPoints: Float, holdAUSD: Float, holdXAVAX: Float, pangolin: Float, pharaoh: Float, rebPool: Float, referral: String, referralUsed: String, totalPoints: Float, traderJoe: Float, userAddress: String!): Main
+  createPtpDeposit(amount: Float!, userAddress: String!): PtpDeposit!
+  createReferral(createdAt: String!, dailyPoints: Float, refereeAddress: String!, referrerAddress: String!): Referral!
+  updateMainPoints(points: Float!, userAddress: String!): Main
+  updateReferral(createdAt: String!, dailyPoints: Float, refereeAddress: String!): Referral!
+}
+
+type PtpDeposit {
+  amount: Float!
+  userAddress: String!
 }
 
 type Query {
-  burnedTokens(walletAddress: String!): [BurnedTokens]!
-  events(walletAddress: String!): [Event!]!
-  liquidationHistory(walletAddress: String!): LiquidationHistory
-  mintedTokens(walletAddress: String!): [MintedTokens]!
-  transfers(walletAddress: String!): [Transfer!]!
-  walletPosition(walletAddress: String!): WalletPosition
+  boosts(walletAddress: String!): [Boost!]!
+  getMain(userAddress: String!): Main
+  ptpDeposit(userAddress: String!): PtpDeposit
+  ptpDeposits: [PtpDeposit!]!
+  referrals: [Referral!]!
 }
 
-type Transfer {
+type Referral {
   createdAt: String!
-  from: String!
-  timestamp: Float!
-  to: String!
-  transactionHash: String!
-  value: String!
-}
-
-type WalletPosition {
-  averageEntryPrice: String!
-  burnedAmount: String!
-  currentXAVAXPrice: String!
-  mintedAmount: String!
-  pnlPercentage: String!
-  positionAmount: String!
-  positionValue: String!
-  transfersIn: String!
-  transfersOut: String!
-  walletAddress: String!
+  dailyPoints: Float
+  refereeAddress: String!
+  referrerAddress: String!
 }

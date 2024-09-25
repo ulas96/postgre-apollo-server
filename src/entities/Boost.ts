@@ -7,10 +7,10 @@ export class Boost extends BaseEntity {
     userAddress!: string;
   
     @Column()
-    sjFriend: string;
+    sjFriend: boolean;
   
     @Column()
-    ptpCohort: string;
+    ptpCohort: boolean;
   
     @Column()
     totalBonus: number;
@@ -19,16 +19,16 @@ export class Boost extends BaseEntity {
     firstCohort: boolean;
   
     @Column()
-    secondCohort: number;
+    secondCohort: boolean;
   
     @Column()
-    thirdCohort: string;
+    thirdCohort: boolean;
   
     @Column()
-    tasks75: number;
+    tasks75: boolean;
 
     @Column()
-    tasks100: number;
+    tasks100: boolean;
 
     @CreateDateColumn({ type: "timestamp" })
     createdAt!: Date;

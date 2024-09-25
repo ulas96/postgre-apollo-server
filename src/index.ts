@@ -14,7 +14,7 @@ const boot = async () => {
         })
     });
 
-    server.listen(5151).then(({url}) => {
+    server.listen(5252).then(({url}) => {
         console.log("listening on" + url )
     })
 };

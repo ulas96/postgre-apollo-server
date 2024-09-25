@@ -7,7 +7,7 @@ export class Referral extends BaseEntity {
     refereeAddress!: string;
   
     @Column()
-    referralAddress!: string;
+    referrerAddress!: string;
 
     @Column()
     dailyPoints: number;

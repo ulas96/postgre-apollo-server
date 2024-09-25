@@ -10,14 +10,14 @@ export const BoostType = objectType({
     name: "Boost",
     definition(t) {
         t.nonNull.string("userAddress"),
-        t.string("sjFriend"),
-        t.string("ptpCohort"),
+        t.boolean("sjFriend"),
+        t.boolean("ptpCohort"),
         t.int("totalBonus"),
         t.boolean("firstCohort"),
-        t.int("secondCohort"),
-        t.string("thirdCohort"),
-        t.int("tasks75"),
-        t.int("tasks100"),
+        t.boolean("secondCohort"),
+        t.boolean("thirdCohort"),
+        t.boolean("tasks75"),
+        t.boolean("tasks100"),
         t.string("createdAt")
     }
 });
@@ -75,18 +75,18 @@ export const BoostsQuery = extendType({
 export const AddBoostMutation = extendType({
     type: "Mutation",
     definition(t) {
-        t.nonNull.field("addBoost", {
+        t.nonNull.field("createBoost", {
             type: "Boost",
             args: {
                 userAddress: nonNull(stringArg()),
-                sjFriend: stringArg(),
-                ptpCohort: stringArg(),
+                sjFriend: booleanArg(),
+                ptpCohort: booleanArg(),
                 totalBonus: intArg(),
                 firstCohort: booleanArg(),
-                secondCohort: intArg(),
-                thirdCohort: stringArg(),
-                tasks75: intArg(),
-                tasks100: intArg(),
+                secondCohort: booleanArg(),
+                thirdCohort: booleanArg(),
+                tasks75: booleanArg(),
+                tasks100: booleanArg(),
                 createdAt: stringArg()
             },
             async resolve(_parent, args, _context, _info) {

@@ -7,11 +7,13 @@ export class Main extends BaseEntity {
     userAddress!: string;
   
     @Column()
-    totalPoints!: number;
+    totalPoints: number;
   
     @Column()
     rebPool: number;
   
+    @Column()
+    holdAUSD: number;
     @Column()
     holdXAVAX: number;
   
@@ -20,10 +22,13 @@ export class Main extends BaseEntity {
   
     @Column()
     pharaoh: number;
+
+    @Column()
+    pangolin: number;
   
     @Column()
     bonus: number;
-  
+
     @Column()
     referral: string;
 
@@ -31,7 +36,7 @@ export class Main extends BaseEntity {
     referralUsed: string;
 
     @CreateDateColumn({ type: "timestamp" })
-    createdAt!: Date;
+    createdAt: Date;
 
     @Column()
     firstEpochPoints: number;

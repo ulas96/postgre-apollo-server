@@ -1,12 +1,12 @@
-import { objectType, extendType, nonNull, stringArg, intArg } from 'nexus'
+import { objectType, extendType, nonNull, stringArg, floatArg } from 'nexus'
 import { Referral } from '../entities/Referral'
 
 export const ReferralType = objectType({
   name: 'Referral',
   definition(t) {
     t.nonNull.string('refereeAddress')
-    t.nonNull.string('referralAddress')
-    t.nonNull.int('dailyPoints')
+    t.nonNull.string('referrerAddress')
+    t.float('dailyPoints')
     t.nonNull.string('createdAt')
   },
 })
@@ -30,15 +30,17 @@ export const ReferralMutation = extendType({
       type: 'Referral',
       args: {
         refereeAddress: nonNull(stringArg()),
-        referralAddress: nonNull(stringArg()),
-        dailyPoints: nonNull(intArg()),
+        referrerAddress: nonNull(stringArg()),
+        dailyPoints: floatArg(),
+        createdAt: nonNull(stringArg()),
       },
-      resolve: (_, { refereeAddress, referralAddress, dailyPoints }) => {
+      resolve: (_, { refereeAddress, referrerAddress, dailyPoints, createdAt }) => {
         return Referral.create({
             refereeAddress,
-            referralAddress,
+            referrerAddress,
             dailyPoints,
-          }).save()
+            createdAt
+          }).save();
       },
     })
 
@@ -46,16 +48,18 @@ export const ReferralMutation = extendType({
       type: 'Referral',
       args: {
         refereeAddress: nonNull(stringArg()),
-        dailyPoints: nonNull(intArg()),
+        dailyPoints: floatArg(),
+        createdAt: nonNull(stringArg()),
       },
-      resolve: async (_, { refereeAddress, dailyPoints }) => {
-        const referral = await Referral.findOne({ where: { refereeAddress } })
+      resolve: async (_, { refereeAddress, dailyPoints, createdAt }) => {
+        const referral = await Referral.findOne({ where: { refereeAddress } });
         if (!referral) {
-          throw new Error('Referral not found')
+          throw new Error('Referral not found');
         }
-        referral.dailyPoints = dailyPoints
-        await referral.save()
-        return referral
+        referral.dailyPoints = dailyPoints;
+        referral.createdAt = createdAt;
+        await referral.save();
+        return referral;
       },
     })
   },

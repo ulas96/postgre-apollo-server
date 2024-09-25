@@ -7,13 +7,15 @@ export const MainType = objectType({
     t.nonNull.string('userAddress')
     t.nonNull.float('totalPoints')
     t.float('rebPool')
+    t.float('holdAUSD')
     t.float('holdXAVAX')
     t.float('traderJoe')
     t.float('pharaoh')
+    t.float('pangolin')
     t.float('bonus')
     t.string('referral')
     t.string('referralUsed')
-    t.nonNull.string('createdAt')
+    t.string('createdAt')
     t.float('firstEpochPoints')
   },
 })
@@ -57,14 +59,17 @@ export const MainMutation = extendType({
       type: 'Main',
       args: {
         userAddress: nonNull(stringArg()),
-        totalPoints: nonNull(floatArg()),
+        totalPoints: floatArg(),
         rebPool: floatArg(),
+        holdAUSD: floatArg(),
         holdXAVAX: floatArg(),
         traderJoe: floatArg(),
         pharaoh: floatArg(),
+        pangolin: floatArg(),
         bonus: floatArg(),
         referral: stringArg(),
         referralUsed: stringArg(),
+        createdAt: stringArg(),
         firstEpochPoints: floatArg(),
       },
       resolve: (_, args) => {

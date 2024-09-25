@@ -14,8 +14,8 @@ export const PtpDepositQuery = extendType({
   definition(t) {
     t.nonNull.list.nonNull.field('ptpDeposits', {
       type: 'PtpDeposit',
-      resolve: async () => {
-        return await PtpDeposit.find()
+      resolve: () => {
+        return PtpDeposit.find();
       },
     })
 
@@ -24,8 +24,8 @@ export const PtpDepositQuery = extendType({
       args: {
         userAddress: nonNull(stringArg()),
       },
-      resolve: async (_, { userAddress }) => {
-        return await PtpDeposit.findOne({ where: { userAddress } })
+      resolve: (_, { userAddress }) => {
+        return PtpDeposit.findOne({ where: { userAddress } });
       },
     })
   },

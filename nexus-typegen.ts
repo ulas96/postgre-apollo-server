@@ -28,62 +28,44 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
-  BurnedTokens: { // root type
-    benefit?: string | null; // String
-    burnedAmount?: string | null; // String
+  Boost: { // root type
     createdAt?: string | null; // String
-    timestamp?: number | null; // Float
-    transactionHash?: string | null; // String
-    walletAddress?: string | null; // String
+    firstCohort?: boolean | null; // Boolean
+    ptpCohort?: boolean | null; // Boolean
+    secondCohort?: boolean | null; // Boolean
+    sjFriend?: boolean | null; // Boolean
+    tasks75?: boolean | null; // Boolean
+    tasks100?: boolean | null; // Boolean
+    thirdCohort?: boolean | null; // Boolean
+    totalBonus?: number | null; // Int
+    userAddress: string; // String!
   }
-  Event: { // root type
-    appName: string; // String!
-    blockNumber: number; // Int!
-    contractAddress: string; // String!
-    createdAt: string; // String!
-    eventData: string; // String!
-    eventName: string; // String!
-    eventSignature: string; // String!
-    id: number; // Int!
-    logIndex: number; // Int!
-    parsedData: string[]; // [String!]!
-    timestamp: number; // Float!
-    transactionHash: string; // String!
-  }
-  LiquidationHistory: { // root type
-    isLiquidated: boolean; // Boolean!
-    lastLiquidation?: number | null; // Int
-  }
-  MintedTokens: { // root type
-    cost?: string | null; // String
+  Main: { // root type
+    bonus?: number | null; // Float
     createdAt?: string | null; // String
-    currentValue?: string | null; // String
-    mintedAmount?: string | null; // String
-    pnlPercentage?: string | null; // String
-    timestamp?: number | null; // Float
-    transactionHash?: string | null; // String
-    walletAddress?: string | null; // String
+    firstEpochPoints?: number | null; // Float
+    holdAUSD?: number | null; // Float
+    holdXAVAX?: number | null; // Float
+    pangolin?: number | null; // Float
+    pharaoh?: number | null; // Float
+    rebPool?: number | null; // Float
+    referral?: string | null; // String
+    referralUsed?: string | null; // String
+    totalPoints: number; // Float!
+    traderJoe?: number | null; // Float
+    userAddress: string; // String!
+  }
+  Mutation: {};
+  PtpDeposit: { // root type
+    amount: number; // Float!
+    userAddress: string; // String!
   }
   Query: {};
-  Transfer: { // root type
+  Referral: { // root type
     createdAt: string; // String!
-    from: string; // String!
-    timestamp: number; // Float!
-    to: string; // String!
-    transactionHash: string; // String!
-    value: string; // String!
-  }
-  WalletPosition: { // root type
-    averageEntryPrice: string; // String!
-    burnedAmount: string; // String!
-    currentXAVAXPrice: string; // String!
-    mintedAmount: string; // String!
-    pnlPercentage: string; // String!
-    positionAmount: string; // String!
-    positionValue: string; // String!
-    transfersIn: string; // String!
-    transfersOut: string; // String!
-    walletAddress: string; // String!
+    dailyPoints?: number | null; // Float
+    refereeAddress: string; // String!
+    referrerAddress: string; // String!
   }
 }
 
@@ -98,158 +80,173 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
-  BurnedTokens: { // field return type
-    benefit: string | null; // String
-    burnedAmount: string | null; // String
+  Boost: { // field return type
     createdAt: string | null; // String
-    timestamp: number | null; // Float
-    transactionHash: string | null; // String
-    walletAddress: string | null; // String
+    firstCohort: boolean | null; // Boolean
+    ptpCohort: boolean | null; // Boolean
+    secondCohort: boolean | null; // Boolean
+    sjFriend: boolean | null; // Boolean
+    tasks75: boolean | null; // Boolean
+    tasks100: boolean | null; // Boolean
+    thirdCohort: boolean | null; // Boolean
+    totalBonus: number | null; // Int
+    userAddress: string; // String!
   }
-  Event: { // field return type
-    appName: string; // String!
-    blockNumber: number; // Int!
-    contractAddress: string; // String!
-    createdAt: string; // String!
-    eventData: string; // String!
-    eventName: string; // String!
-    eventSignature: string; // String!
-    id: number; // Int!
-    logIndex: number; // Int!
-    parsedData: string[]; // [String!]!
-    timestamp: number; // Float!
-    transactionHash: string; // String!
-  }
-  LiquidationHistory: { // field return type
-    isLiquidated: boolean; // Boolean!
-    lastLiquidation: number | null; // Int
-  }
-  MintedTokens: { // field return type
-    cost: string | null; // String
+  Main: { // field return type
+    bonus: number | null; // Float
     createdAt: string | null; // String
-    currentValue: string | null; // String
-    mintedAmount: string | null; // String
-    pnlPercentage: string | null; // String
-    timestamp: number | null; // Float
-    transactionHash: string | null; // String
-    walletAddress: string | null; // String
+    firstEpochPoints: number | null; // Float
+    holdAUSD: number | null; // Float
+    holdXAVAX: number | null; // Float
+    pangolin: number | null; // Float
+    pharaoh: number | null; // Float
+    rebPool: number | null; // Float
+    referral: string | null; // String
+    referralUsed: string | null; // String
+    totalPoints: number; // Float!
+    traderJoe: number | null; // Float
+    userAddress: string; // String!
+  }
+  Mutation: { // field return type
+    createBoost: NexusGenRootTypes['Boost']; // Boost!
+    createMain: NexusGenRootTypes['Main'] | null; // Main
+    createPtpDeposit: NexusGenRootTypes['PtpDeposit']; // PtpDeposit!
+    createReferral: NexusGenRootTypes['Referral']; // Referral!
+    updateMainPoints: NexusGenRootTypes['Main'] | null; // Main
+    updateReferral: NexusGenRootTypes['Referral']; // Referral!
+  }
+  PtpDeposit: { // field return type
+    amount: number; // Float!
+    userAddress: string; // String!
   }
   Query: { // field return type
-    burnedTokens: Array<NexusGenRootTypes['BurnedTokens'] | null>; // [BurnedTokens]!
-    events: NexusGenRootTypes['Event'][]; // [Event!]!
-    liquidationHistory: NexusGenRootTypes['LiquidationHistory'] | null; // LiquidationHistory
-    mintedTokens: Array<NexusGenRootTypes['MintedTokens'] | null>; // [MintedTokens]!
-    transfers: NexusGenRootTypes['Transfer'][]; // [Transfer!]!
-    walletPosition: NexusGenRootTypes['WalletPosition'] | null; // WalletPosition
+    boosts: NexusGenRootTypes['Boost'][]; // [Boost!]!
+    getMain: NexusGenRootTypes['Main'] | null; // Main
+    ptpDeposit: NexusGenRootTypes['PtpDeposit'] | null; // PtpDeposit
+    ptpDeposits: NexusGenRootTypes['PtpDeposit'][]; // [PtpDeposit!]!
+    referrals: NexusGenRootTypes['Referral'][]; // [Referral!]!
   }
-  Transfer: { // field return type
+  Referral: { // field return type
     createdAt: string; // String!
-    from: string; // String!
-    timestamp: number; // Float!
-    to: string; // String!
-    transactionHash: string; // String!
-    value: string; // String!
-  }
-  WalletPosition: { // field return type
-    averageEntryPrice: string; // String!
-    burnedAmount: string; // String!
-    currentXAVAXPrice: string; // String!
-    mintedAmount: string; // String!
-    pnlPercentage: string; // String!
-    positionAmount: string; // String!
-    positionValue: string; // String!
-    transfersIn: string; // String!
-    transfersOut: string; // String!
-    walletAddress: string; // String!
+    dailyPoints: number | null; // Float
+    refereeAddress: string; // String!
+    referrerAddress: string; // String!
   }
 }
 
 export interface NexusGenFieldTypeNames {
-  BurnedTokens: { // field return type name
-    benefit: 'String'
-    burnedAmount: 'String'
+  Boost: { // field return type name
     createdAt: 'String'
-    timestamp: 'Float'
-    transactionHash: 'String'
-    walletAddress: 'String'
+    firstCohort: 'Boolean'
+    ptpCohort: 'Boolean'
+    secondCohort: 'Boolean'
+    sjFriend: 'Boolean'
+    tasks75: 'Boolean'
+    tasks100: 'Boolean'
+    thirdCohort: 'Boolean'
+    totalBonus: 'Int'
+    userAddress: 'String'
   }
-  Event: { // field return type name
-    appName: 'String'
-    blockNumber: 'Int'
-    contractAddress: 'String'
+  Main: { // field return type name
+    bonus: 'Float'
     createdAt: 'String'
-    eventData: 'String'
-    eventName: 'String'
-    eventSignature: 'String'
-    id: 'Int'
-    logIndex: 'Int'
-    parsedData: 'String'
-    timestamp: 'Float'
-    transactionHash: 'String'
+    firstEpochPoints: 'Float'
+    holdAUSD: 'Float'
+    holdXAVAX: 'Float'
+    pangolin: 'Float'
+    pharaoh: 'Float'
+    rebPool: 'Float'
+    referral: 'String'
+    referralUsed: 'String'
+    totalPoints: 'Float'
+    traderJoe: 'Float'
+    userAddress: 'String'
   }
-  LiquidationHistory: { // field return type name
-    isLiquidated: 'Boolean'
-    lastLiquidation: 'Int'
+  Mutation: { // field return type name
+    createBoost: 'Boost'
+    createMain: 'Main'
+    createPtpDeposit: 'PtpDeposit'
+    createReferral: 'Referral'
+    updateMainPoints: 'Main'
+    updateReferral: 'Referral'
   }
-  MintedTokens: { // field return type name
-    cost: 'String'
-    createdAt: 'String'
-    currentValue: 'String'
-    mintedAmount: 'String'
-    pnlPercentage: 'String'
-    timestamp: 'Float'
-    transactionHash: 'String'
-    walletAddress: 'String'
+  PtpDeposit: { // field return type name
+    amount: 'Float'
+    userAddress: 'String'
   }
   Query: { // field return type name
-    burnedTokens: 'BurnedTokens'
-    events: 'Event'
-    liquidationHistory: 'LiquidationHistory'
-    mintedTokens: 'MintedTokens'
-    transfers: 'Transfer'
-    walletPosition: 'WalletPosition'
+    boosts: 'Boost'
+    getMain: 'Main'
+    ptpDeposit: 'PtpDeposit'
+    ptpDeposits: 'PtpDeposit'
+    referrals: 'Referral'
   }
-  Transfer: { // field return type name
+  Referral: { // field return type name
     createdAt: 'String'
-    from: 'String'
-    timestamp: 'Float'
-    to: 'String'
-    transactionHash: 'String'
-    value: 'String'
-  }
-  WalletPosition: { // field return type name
-    averageEntryPrice: 'String'
-    burnedAmount: 'String'
-    currentXAVAXPrice: 'String'
-    mintedAmount: 'String'
-    pnlPercentage: 'String'
-    positionAmount: 'String'
-    positionValue: 'String'
-    transfersIn: 'String'
-    transfersOut: 'String'
-    walletAddress: 'String'
+    dailyPoints: 'Float'
+    refereeAddress: 'String'
+    referrerAddress: 'String'
   }
 }
 
 export interface NexusGenArgTypes {
+  Mutation: {
+    createBoost: { // args
+      createdAt?: string | null; // String
+      firstCohort?: boolean | null; // Boolean
+      ptpCohort?: boolean | null; // Boolean
+      secondCohort?: boolean | null; // Boolean
+      sjFriend?: boolean | null; // Boolean
+      tasks75?: boolean | null; // Boolean
+      tasks100?: boolean | null; // Boolean
+      thirdCohort?: boolean | null; // Boolean
+      totalBonus?: number | null; // Int
+      userAddress: string; // String!
+    }
+    createMain: { // args
+      bonus?: number | null; // Float
+      createdAt?: string | null; // String
+      firstEpochPoints?: number | null; // Float
+      holdAUSD?: number | null; // Float
+      holdXAVAX?: number | null; // Float
+      pangolin?: number | null; // Float
+      pharaoh?: number | null; // Float
+      rebPool?: number | null; // Float
+      referral?: string | null; // String
+      referralUsed?: string | null; // String
+      totalPoints?: number | null; // Float
+      traderJoe?: number | null; // Float
+      userAddress: string; // String!
+    }
+    createPtpDeposit: { // args
+      amount: number; // Float!
+      userAddress: string; // String!
+    }
+    createReferral: { // args
+      createdAt: string; // String!
+      dailyPoints?: number | null; // Float
+      refereeAddress: string; // String!
+      referrerAddress: string; // String!
+    }
+    updateMainPoints: { // args
+      points: number; // Float!
+      userAddress: string; // String!
+    }
+    updateReferral: { // args
+      createdAt: string; // String!
+      dailyPoints?: number | null; // Float
+      refereeAddress: string; // String!
+    }
+  }
   Query: {
-    burnedTokens: { // args
+    boosts: { // args
       walletAddress: string; // String!
     }
-    events: { // args
-      walletAddress: string; // String!
+    getMain: { // args
+      userAddress: string; // String!
     }
-    liquidationHistory: { // args
-      walletAddress: string; // String!
-    }
-    mintedTokens: { // args
-      walletAddress: string; // String!
-    }
-    transfers: { // args
-      walletAddress: string; // String!
-    }
-    walletPosition: { // args
-      walletAddress: string; // String!
+    ptpDeposit: { // args
+      userAddress: string; // String!
     }
   }
 }

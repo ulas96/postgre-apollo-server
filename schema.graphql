@@ -26,7 +26,7 @@ type Main {
   rebPool: Float
   referral: String
   referralUsed: String
-  totalPoints: Float!
+  totalPoints: Float
   traderJoe: Float
   userAddress: String!
 }

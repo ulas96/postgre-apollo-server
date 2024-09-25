@@ -5,7 +5,7 @@ export const MainType = objectType({
   name: 'Main',
   definition(t) {
     t.nonNull.string('userAddress')
-    t.nonNull.float('totalPoints')
+    t.float('totalPoints')
     t.float('rebPool')
     t.float('holdAUSD')
     t.float('holdXAVAX')

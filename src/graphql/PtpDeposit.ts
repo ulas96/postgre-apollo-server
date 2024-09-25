@@ -1,5 +1,5 @@
 import { objectType, extendType, nonNull, stringArg, floatArg } from 'nexus'
-import { PtpDeposit } from '../entities/PtpDeposit'
+import { PtpDeposit } from '../entities/Ptp'
 
 export const PtpDepositType = objectType({
   name: 'PtpDeposit',

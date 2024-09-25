@@ -14,6 +14,7 @@ export class Main extends BaseEntity {
   
     @Column()
     holdAUSD: number;
+
     @Column()
     holdXAVAX: number;
   
@@ -32,7 +33,7 @@ export class Main extends BaseEntity {
     @Column()
     referral: string;
 
-    @Column({ type: "text" })
+    @Column()
     referralUsed: string;
 
     @CreateDateColumn({ type: "timestamp" })

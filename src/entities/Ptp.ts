@@ -2,7 +2,7 @@ import { BaseEntity, Entity, PrimaryColumn, Column } from "typeorm";
 
 @Entity()
 
-export class PtpDeposit extends BaseEntity {
+export class Ptp extends BaseEntity {
     @PrimaryColumn()
     userAddress!: string;
   

@@ -56,11 +56,14 @@ export interface NexusGenObjects {
     userAddress: string; // String!
   }
   Mutation: {};
-  PtpDeposit: { // root type
+  Ptp: { // root type
     amount: number; // Float!
     userAddress: string; // String!
   }
   Query: {};
+  Referees: { // root type
+    referees: string[]; // [String!]!
+  }
   Referral: { // root type
     createdAt: string; // String!
     dailyPoints?: number | null; // Float
@@ -110,21 +113,28 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     createBoost: NexusGenRootTypes['Boost']; // Boost!
     createMain: NexusGenRootTypes['Main'] | null; // Main
-    createPtpDeposit: NexusGenRootTypes['PtpDeposit']; // PtpDeposit!
-    createReferral: NexusGenRootTypes['Referral']; // Referral!
+    createPtp: NexusGenRootTypes['Ptp']; // Ptp!
+    createReferral: NexusGenRootTypes['Referral'] | null; // Referral
     updateMainPoints: NexusGenRootTypes['Main'] | null; // Main
-    updateReferral: NexusGenRootTypes['Referral']; // Referral!
+    updateReferral: NexusGenRootTypes['Referral'] | null; // Referral
   }
-  PtpDeposit: { // field return type
+  Ptp: { // field return type
     amount: number; // Float!
     userAddress: string; // String!
   }
   Query: { // field return type
-    boosts: NexusGenRootTypes['Boost'][]; // [Boost!]!
-    getMain: NexusGenRootTypes['Main'] | null; // Main
-    ptpDeposit: NexusGenRootTypes['PtpDeposit'] | null; // PtpDeposit
-    ptpDeposits: NexusGenRootTypes['PtpDeposit'][]; // [PtpDeposit!]!
-    referrals: NexusGenRootTypes['Referral'][]; // [Referral!]!
+    boost: NexusGenRootTypes['Boost'] | null; // Boost
+    getAllUserAddresses: string[] | null; // [String!]
+    ptp: NexusGenRootTypes['Ptp'] | null; // Ptp
+    referees: NexusGenRootTypes['Referees'] | null; // Referees
+    referral: NexusGenRootTypes['Referral'] | null; // Referral
+    referrals: NexusGenRootTypes['Referral'] | null; // Referral
+    referrerPoints: number | null; // Float
+    user: NexusGenRootTypes['Main'] | null; // Main
+    users: Array<NexusGenRootTypes['Main'] | null> | null; // [Main]
+  }
+  Referees: { // field return type
+    referees: string[]; // [String!]!
   }
   Referral: { // field return type
     createdAt: string; // String!
@@ -165,21 +175,28 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     createBoost: 'Boost'
     createMain: 'Main'
-    createPtpDeposit: 'PtpDeposit'
+    createPtp: 'Ptp'
     createReferral: 'Referral'
     updateMainPoints: 'Main'
     updateReferral: 'Referral'
   }
-  PtpDeposit: { // field return type name
+  Ptp: { // field return type name
     amount: 'Float'
     userAddress: 'String'
   }
   Query: { // field return type name
-    boosts: 'Boost'
-    getMain: 'Main'
-    ptpDeposit: 'PtpDeposit'
-    ptpDeposits: 'PtpDeposit'
+    boost: 'Boost'
+    getAllUserAddresses: 'String'
+    ptp: 'Ptp'
+    referees: 'Referees'
+    referral: 'Referral'
     referrals: 'Referral'
+    referrerPoints: 'Float'
+    user: 'Main'
+    users: 'Main'
+  }
+  Referees: { // field return type name
+    referees: 'String'
   }
   Referral: { // field return type name
     createdAt: 'String'
@@ -218,7 +235,7 @@ export interface NexusGenArgTypes {
       traderJoe?: number | null; // Float
       userAddress: string; // String!
     }
-    createPtpDeposit: { // args
+    createPtp: { // args
       amount: number; // Float!
       userAddress: string; // String!
     }
@@ -239,13 +256,19 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
-    boosts: { // args
+    boost: { // args
       walletAddress: string; // String!
     }
-    getMain: { // args
+    ptp: { // args
       userAddress: string; // String!
     }
-    ptpDeposit: { // args
+    referral: { // args
+      refereeAddress: string; // String!
+    }
+    referrerPoints: { // args
+      referrerAddress: string; // String!
+    }
+    user: { // args
       userAddress: string; // String!
     }
   }

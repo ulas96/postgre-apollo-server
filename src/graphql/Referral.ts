@@ -1,5 +1,5 @@
 import { objectType, extendType, nonNull, stringArg, floatArg } from 'nexus'
-import { Referral } from '../entities/Referral'
+import { Referral } from '../entities'
 
 export const ReferralType = objectType({
   name: 'Referral',
@@ -9,55 +9,85 @@ export const ReferralType = objectType({
     t.float('dailyPoints')
     t.nonNull.string('createdAt')
   },
-})
+});
+
+export const RefereesType = objectType({
+  name: 'Referees',
+  definition(t) {
+    t.nonNull.list.nonNull.string('referees')
+  },
+});
 
 export const ReferralQuery = extendType({
   type: 'Query',
   definition(t) {
-    t.nonNull.list.nonNull.field('referrals', {
+    t.field('referral', {
       type: 'Referral',
-      resolve: async () => {
-        return await Referral.find()
+      args: { 
+        refereeAddress: nonNull(stringArg()),
       },
-    })
+      resolve: async (_, { refereeAddress }) => {
+        return await Referral.findOne({ where: { refereeAddress } });
+      },
+    });
+
+    t.field('referrals', {
+      type: 'Referral',
+      resolve: () => {
+        return Referral.find();
+      },
+    });
+
+    t.field('referees', {
+      type: 'Referees',
+      resolve: async () => {
+        return (await Referral.find({ select: ['refereeAddress'] })).map(referral => referral.refereeAddress);
+      },
+    });
+
+
+  t.field("referrerPoints", {
+    type: "Float",
+    args: {
+      referrerAddress: nonNull(stringArg()),
+    },
+    resolve: async (_, { referrerAddress }) => {
+      return await Referral.findOne({ where: { referrerAddress } });
+    },
+  })
   },
 })
 
 export const ReferralMutation = extendType({
   type: 'Mutation',
   definition(t) {
-    t.nonNull.field('createReferral', {
+    t.field('createReferral', {
       type: 'Referral',
       args: {
         refereeAddress: nonNull(stringArg()),
         referrerAddress: nonNull(stringArg()),
         dailyPoints: floatArg(),
         createdAt: nonNull(stringArg()),
-      },
-      resolve: (_, { refereeAddress, referrerAddress, dailyPoints, createdAt }) => {
-        return Referral.create({
-            refereeAddress,
-            referrerAddress,
-            dailyPoints,
-            createdAt
-          }).save();
+        },
+        resolve: (_, args: Referral) => {
+        return Referral.create(args).save();
       },
     })
 
-    t.nonNull.field('updateReferral', {
+    t.field('updateReferral', {
       type: 'Referral',
       args: {
         refereeAddress: nonNull(stringArg()),
         dailyPoints: floatArg(),
         createdAt: nonNull(stringArg()),
       },
-      resolve: async (_, { refereeAddress, dailyPoints, createdAt }) => {
-        const referral = await Referral.findOne({ where: { refereeAddress } });
+      resolve: async (_, args: Partial<Referral>) => {
+        const referral = await Referral.findOne({ where: { refereeAddress: args.refereeAddress } });
         if (!referral) {
           throw new Error('Referral not found');
         }
-        referral.dailyPoints = dailyPoints;
-        referral.createdAt = createdAt;
+        referral.dailyPoints = args.dailyPoints ?? 0;
+        referral.createdAt = args.createdAt ?? new Date("");
         await referral.save();
         return referral;
       },

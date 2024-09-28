@@ -1,6 +1,5 @@
 import { extendType, objectType, stringArg, nonNull, intArg, booleanArg } from "nexus"; 
-import { Context } from "../types/Context";
-import { Boost } from "../entities/Boost";
+import { Boost } from "../entities";
 
 /**
  * @title Boost Type
@@ -31,27 +30,13 @@ export const BoostType = objectType({
 export const BoostsQuery = extendType({
     type: "Query",
     definition(t) {
-        t.nonNull.list.nonNull.field("boosts", {
+        t.field("boost", {
             type: "Boost",
             args: {
                 walletAddress: nonNull(stringArg()),
             },
-            async resolve(_parent, args, context: Context, _info) {
-                const { connection } = context;
-                const { walletAddress } = args;
-
-                let query = `
-                    SELECT DISTINCT ON ("userAddress") *
-                    FROM boost
-                    WHERE "userAddress" = $1
-                `;
-
-                try {
-                    const result = await connection.query(query, [walletAddress]);
-                    return result;
-                } catch (error) {
-                    throw new Error('Failed to fetch unique boosts');
-                }
+            async resolve(_parent, args) {
+                return Boost.find({ where: { userAddress: args.walletAddress } });
             }
         });
     }
@@ -89,32 +74,8 @@ export const AddBoostMutation = extendType({
                 tasks100: booleanArg(),
                 createdAt: stringArg()
             },
-            async resolve(_parent, args, _context, _info) {
-                const {
-                    userAddress,
-                    sjFriend,
-                    ptpCohort,
-                    totalBonus,
-                    firstCohort,
-                    secondCohort,
-                    thirdCohort,
-                    tasks75,
-                    tasks100,
-                    createdAt
-                } = args;
-
-                return Boost.create({
-                    userAddress,
-                    sjFriend,
-                    ptpCohort,
-                    totalBonus,
-                    firstCohort,
-                    secondCohort,
-                    thirdCohort,
-                    tasks75,
-                    tasks100,
-                    createdAt
-                }).save();
+            async resolve(_parent, args: Boost) {
+                return Boost.create(args).save();
             }
         });
     }

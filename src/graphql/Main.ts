@@ -1,5 +1,5 @@
 import { objectType, extendType, nonNull, stringArg, floatArg } from 'nexus'
-import { Main } from '../entities/Main'
+import { Main } from '../entities'
 
 export const MainType = objectType({
   name: 'Main',
@@ -23,7 +23,7 @@ export const MainType = objectType({
 export const MainQuery = extendType({
   type: 'Query',
   definition(t) {
-    t.field('getMain', {
+    t.field('user', {
       type: 'Main',
       args: {
         userAddress: nonNull(stringArg()),
@@ -32,8 +32,24 @@ export const MainQuery = extendType({
         return Main.findOne({ where: { userAddress } })
       },
     })
+
+    t.list.field('users', {
+      type: 'Main',
+      resolve: () => {
+        return Main.find()
+      },
+    })
+
+
+    t.list.nonNull.string('getAllUserAddresses', {
+      resolve: async () => {
+        const users = await Main.find({ select: ['userAddress'] })
+        return users.map(user => user.userAddress)
+      },
+    })
   },
-})
+}); 
+
 
 export const MainMutation = extendType({
   type: 'Mutation',
@@ -72,8 +88,8 @@ export const MainMutation = extendType({
         createdAt: stringArg(),
         firstEpochPoints: floatArg(),
       },
-      resolve: (_, args) => {
-        return Main.create(args as Partial<Main>).save();
+      resolve: async(_, args) => {
+        return await Main.create(args as Main).save();
       },
     })
   },

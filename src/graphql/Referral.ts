@@ -35,7 +35,7 @@ export const ReferralQuery = extendType({
         refereeAddress: nonNull(stringArg()),
       },
       resolve: async (_, { refereeAddress }) => {
-        return await Referral.findOne({ where: { refereeAddress } });
+        return await Referral.findOne({ where: { refereeAddress: refereeAddress.toLowerCase() } });
       },
     });
 
@@ -60,7 +60,7 @@ export const ReferralQuery = extendType({
       referrerAddress: nonNull(stringArg()),
     },
     resolve: async (_, { referrerAddress }) => {
-      return await Referral.findOne({ where: { referrerAddress } });
+      return await Referral.findOne({ where: { referrerAddress: referrerAddress.toLowerCase() } });
     },
   })
   },
@@ -77,8 +77,8 @@ export const ReferralMutation = extendType({
         dailyPoints: floatArg(),
         createdAt: nonNull(stringArg()),
         },
-        resolve: (_, args: Referral) => {
-        return Referral.create(args).save();
+        resolve: (_, { refereeAddress, referrerAddress , dailyPoints, createdAt}) => {
+        return Referral.create({ refereeAddress: refereeAddress.toLowerCase() , referrerAddress , dailyPoints, createdAt}).save();
       },
     });
 
@@ -89,13 +89,13 @@ export const ReferralMutation = extendType({
         dailyPoints: floatArg(),
         createdAt: nonNull(stringArg()),
       },
-      resolve: async (_, args: Partial<Referral>) => {
-        const referral = await Referral.findOne({ where: { refereeAddress: args.refereeAddress } });
+      resolve: async (_, {refereeAddress, dailyPoints, createdAt}) => {
+        const referral = await Referral.findOne({ where: { refereeAddress: refereeAddress.toLowerCase() } });
         if (!referral) {
           throw new Error('Referral not found');
         }
-        referral.dailyPoints = args.dailyPoints ?? 0;
-        referral.createdAt = args.createdAt ?? new Date("");
+        referral.dailyPoints = dailyPoints ?? 0;
+        referral.createdAt = createdAt ?? new Date("");
         return await referral.save();
       },
     });
@@ -107,7 +107,7 @@ export const ReferralMutation = extendType({
         dailyPoints: nonNull(floatArg()),
       },
       resolve: async (_, { refereeAddress, dailyPoints }) => {
-        const referral = await Referral.findOne({ where: { refereeAddress } });
+        const referral = await Referral.findOne({ where: { refereeAddress: refereeAddress.toLowerCase() } });
         if (!referral) {
           throw new Error('Referral not found');
         }

@@ -15,6 +15,11 @@ type Boost {
   userAddress: String!
 }
 
+type DailyPoints {
+  dailyPoints: Float!
+  refereeAddress: String!
+}
+
 type Main {
   bonus: Float
   createdAt: String
@@ -32,23 +37,19 @@ type Main {
 }
 
 type Mutation {
+  addBonus(points: Float!, userAddress: String!): Main
   createBoost(createdAt: String, firstCohort: Boolean, ptpCohort: Boolean, secondCohort: Boolean, sjFriend: Boolean, tasks75: Boolean, tasks100: Boolean, thirdCohort: Boolean, totalBonus: Int, userAddress: String!): Boost!
   createMain(bonus: Float, createdAt: String, firstEpochPoints: Float, holdAUSD: Float, holdXAVAX: Float, pangolin: Float, pharaoh: Float, rebPool: Float, referral: String, referralUsed: String, totalPoints: Float, traderJoe: Float, userAddress: String!): Main
-  createPtp(amount: Float!, userAddress: String!): Ptp!
   createReferral(createdAt: String!, dailyPoints: Float, refereeAddress: String!, referrerAddress: String!): Referral
-  updateMainPoints(points: Float!, userAddress: String!): Main
+  updateDailyPoints(dailyPoints: Float!, refereeAddress: String!): Referral
+  updatePoints(points: Float!, userAddress: String!): Main
   updateReferral(createdAt: String!, dailyPoints: Float, refereeAddress: String!): Referral
-}
-
-type Ptp {
-  amount: Float!
-  userAddress: String!
+  updateUserPoints(holdAUSD: Float, holdXAVAX: Float, pangolin: Float, pharaoh: Float, rebPool: Float, totalPoints: Float, traderJoe: Float, userAddress: String!): Main
 }
 
 type Query {
-  boost(walletAddress: String!): Boost
+  boost(userAddress: String!): Boost
   getAllUserAddresses: [String!]
-  ptp(userAddress: String!): Ptp
   referees: Referees
   referral(refereeAddress: String!): Referral
   referrals: Referral

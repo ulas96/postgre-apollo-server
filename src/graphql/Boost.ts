@@ -24,7 +24,7 @@ export const BoostType = objectType({
 /**
  * @title Boosts Query
  * @description Query to fetch boosts, optionally filtered by wallet address
- * @param walletAddress - Optional wallet address to filter boosts
+ * @param userAddress - Optional wallet address to filter boosts
  * @returns List of Boost objects
  */
 export const BoostsQuery = extendType({
@@ -33,10 +33,10 @@ export const BoostsQuery = extendType({
         t.field("boost", {
             type: "Boost",
             args: {
-                walletAddress: nonNull(stringArg()),
+                userAddress: nonNull(stringArg()),
             },
-            async resolve(_parent, args) {
-                return Boost.find({ where: { userAddress: args.walletAddress } });
+            async resolve(_parent, { userAddress }) {
+                return Boost.find({ where: { userAddress: userAddress.toLowerCase() } });
             }
         });
     }
@@ -74,8 +74,8 @@ export const AddBoostMutation = extendType({
                 tasks100: booleanArg(),
                 createdAt: stringArg()
             },
-            async resolve(_parent, args: Boost) {
-                return Boost.create(args).save();
+            async resolve(_parent, { userAddress, sjFriend, ptpCohort, totalBonus, firstCohort, secondCohort, thirdCohort, tasks75, tasks100, createdAt }) {
+                return await Boost.create({ userAddress: userAddress.toLowerCase(), sjFriend, ptpCohort, totalBonus, firstCohort, secondCohort, thirdCohort, tasks75, tasks100, createdAt }).save();
             }
         });
     }

@@ -18,6 +18,14 @@ export const RefereesType = objectType({
   },
 });
 
+export const DailyPointsType = objectType({
+  name: 'DailyPoints',
+  definition(t) {
+    t.nonNull.string('refereeAddress')
+    t.nonNull.float('dailyPoints')
+  },
+});
+
 export const ReferralQuery = extendType({
   type: 'Query',
   definition(t) {
@@ -72,7 +80,7 @@ export const ReferralMutation = extendType({
         resolve: (_, args: Referral) => {
         return Referral.create(args).save();
       },
-    })
+    });
 
     t.field('updateReferral', {
       type: 'Referral',
@@ -88,9 +96,24 @@ export const ReferralMutation = extendType({
         }
         referral.dailyPoints = args.dailyPoints ?? 0;
         referral.createdAt = args.createdAt ?? new Date("");
-        await referral.save();
-        return referral;
+        return await referral.save();
       },
-    })
+    });
+
+    t.field('updateDailyPoints', {
+      type: 'Referral',
+      args: {
+        refereeAddress: nonNull(stringArg()),
+        dailyPoints: nonNull(floatArg()),
+      },
+      resolve: async (_, { refereeAddress, dailyPoints }) => {
+        const referral = await Referral.findOne({ where: { refereeAddress } });
+        if (!referral) {
+          throw new Error('Referral not found');
+        }
+        referral.dailyPoints = dailyPoints;
+        return await referral.save();
+      },
+    });
   },
 })

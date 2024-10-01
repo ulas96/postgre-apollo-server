@@ -1,5 +1,5 @@
-import { objectType, extendType, nonNull, stringArg, floatArg } from 'nexus'
-import { Main } from '../entities'
+import { objectType, extendType, nonNull, stringArg, floatArg } from 'nexus';
+import { Main } from '../entities';
 
 export const MainType = objectType({
   name: 'Main',
@@ -29,7 +29,7 @@ export const MainQuery = extendType({
         userAddress: nonNull(stringArg()),
       },
       resolve: (_, { userAddress }) => {
-        return Main.findOne({ where: { userAddress } })
+        return Main.findOne({ where: { userAddress: userAddress.toLowerCase() } })
       },
     })
 
@@ -54,22 +54,6 @@ export const MainQuery = extendType({
 export const MainMutation = extendType({
   type: 'Mutation',
   definition(t) {
-    t.field('updateMainPoints', {
-      type: 'Main',
-      args: {
-        userAddress: nonNull(stringArg()),
-        points: nonNull(floatArg()),
-      },
-      resolve: async (_, { userAddress, points }) => {
-        const main = await Main.findOne({ where: { userAddress } })
-        if (!main) {
-          throw new Error('User not found')
-        }
-        main.totalPoints += points
-        await main.save()
-        return main
-      },
-    })
 
     t.field('createMain', {
       type: 'Main',
@@ -88,9 +72,71 @@ export const MainMutation = extendType({
         createdAt: stringArg(),
         firstEpochPoints: floatArg(),
       },
-      resolve: async(_, args) => {
-        return await Main.create(args as Main).save();
+      resolve: async(_, { userAddress, totalPoints, rebPool, holdAUSD, holdXAVAX, traderJoe, pharaoh, pangolin, bonus, referral, referralUsed, createdAt, firstEpochPoints }) => {
+        return await Main.create({ userAddress: userAddress.toLowerCase(), totalPoints, rebPool, holdAUSD, holdXAVAX, traderJoe, pharaoh, pangolin, bonus, referral, referralUsed, createdAt, firstEpochPoints }).save();
       },
-    })
+    });
+
+    t.field('addBonus', {
+      type: 'Main',
+      args: {
+        userAddress: nonNull(stringArg()),
+        points: nonNull(floatArg()),
+      },
+      resolve: async (_, { userAddress, points }) => {
+        const main = await Main.findOne({ where: { userAddress: userAddress.toLowerCase() } });
+        if (!main) {
+          throw new Error('User not found');
+        }
+        main.bonus += points;
+        main.totalPoints += points;
+        await main.save();
+        return main;
+      },
+    });
+
+    t.field('updatePoints', {
+      type: 'Main',
+      args: {
+        userAddress: nonNull(stringArg()),
+        points: nonNull(floatArg()),
+      },
+      resolve: async (_, { userAddress, points }) => {
+        const main = await Main.findOne({ where: { userAddress: userAddress.toLowerCase() } });
+        if (!main) {
+          throw new Error('User not found');
+        }
+        main.totalPoints = points;
+        return await main.save();
+      },
+    });
+
+    t.field("updateUserPoints", {
+      type: "Main",
+      args: {
+        userAddress: nonNull(stringArg()),
+        totalPoints: floatArg(),
+        rebPool: floatArg(),
+        holdAUSD: floatArg(),
+        holdXAVAX: floatArg(),
+        traderJoe: floatArg(),
+        pharaoh: floatArg(),
+        pangolin: floatArg()
+      },
+      resolve: async (_, { userAddress, totalPoints, rebPool, holdAUSD, holdXAVAX, traderJoe, pharaoh, pangolin }) => {
+        const main = await Main.findOne({ where: { userAddress: userAddress.toLowerCase() } });
+        if (!main) {
+          throw new Error('User not found');
+        }
+        main.totalPoints = totalPoints;
+        main.rebPool = rebPool;
+        main.holdAUSD = holdAUSD;
+        main.holdXAVAX = holdXAVAX;
+        main.traderJoe = traderJoe;
+        main.pharaoh = pharaoh;
+        main.pangolin = pangolin;
+        return await main.save();
+      },
+    });
   },
 })

@@ -50,9 +50,8 @@ type Mutation {
 type Query {
   boost(userAddress: String!): Boost
   getAllUserAddresses: [String!]
-  referees: Referees
   referral(refereeAddress: String!): Referral
-  referrals: Referral
+  referrals: [Referral!]!
   referrerPoints(referrerAddress: String!): Float
   user(userAddress: String!): Main
   users: [Main]

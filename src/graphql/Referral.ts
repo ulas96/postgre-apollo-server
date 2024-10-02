@@ -11,6 +11,7 @@ export const ReferralType = objectType({
   },
 });
 
+
 export const RefereesType = objectType({
   name: 'Referees',
   definition(t) {
@@ -39,30 +40,23 @@ export const ReferralQuery = extendType({
       },
     });
 
-    t.field('referrals', {
-      type: 'Referral',
-      resolve: () => {
-        return Referral.find();
-      },
-    });
-
-    t.field('referees', {
-      type: 'Referees',
+    t.nonNull.list.field('referrals', {
+      type: nonNull('Referral'),
       resolve: async () => {
-        return (await Referral.find({ select: ['refereeAddress'] })).map(referral => referral.refereeAddress);
+        return await Referral.find();
       },
     });
 
 
-  t.field("referrerPoints", {
-    type: "Float",
-    args: {
-      referrerAddress: nonNull(stringArg()),
-    },
-    resolve: async (_, { referrerAddress }) => {
-      return await Referral.findOne({ where: { referrerAddress: referrerAddress.toLowerCase() } });
-    },
-  })
+    t.field("referrerPoints", {
+      type: "Float",
+      args: {
+        referrerAddress: nonNull(stringArg()),
+      },
+      resolve: async (_, { referrerAddress }) => {
+        return await Referral.findOne({ where: { referrerAddress: referrerAddress.toLowerCase() } });
+      },
+    })
   },
 })
 

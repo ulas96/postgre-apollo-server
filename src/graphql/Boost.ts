@@ -36,7 +36,7 @@ export const BoostsQuery = extendType({
                 userAddress: nonNull(stringArg()),
             },
             async resolve(_parent, { userAddress }) {
-                return Boost.find({ where: { userAddress: userAddress.toLowerCase() } });
+                return Boost.findOne({ where: { userAddress: userAddress.toLowerCase() } });
             }
         });
     }

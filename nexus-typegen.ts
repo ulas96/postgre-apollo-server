@@ -127,9 +127,8 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     boost: NexusGenRootTypes['Boost'] | null; // Boost
     getAllUserAddresses: string[] | null; // [String!]
-    referees: NexusGenRootTypes['Referees'] | null; // Referees
     referral: NexusGenRootTypes['Referral'] | null; // Referral
-    referrals: NexusGenRootTypes['Referral'] | null; // Referral
+    referrals: NexusGenRootTypes['Referral'][]; // [Referral!]!
     referrerPoints: number | null; // Float
     user: NexusGenRootTypes['Main'] | null; // Main
     users: Array<NexusGenRootTypes['Main'] | null> | null; // [Main]
@@ -190,7 +189,6 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     boost: 'Boost'
     getAllUserAddresses: 'String'
-    referees: 'Referees'
     referral: 'Referral'
     referrals: 'Referral'
     referrerPoints: 'Float'

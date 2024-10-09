@@ -31,12 +31,19 @@ export const BoostsQuery = extendType({
     type: "Query",
     definition(t) {
         t.field("boost", {
-            type: "Boost",
+            type: "Boost", 
             args: {
                 userAddress: nonNull(stringArg()),
             },
             async resolve(_parent, { userAddress }) {
                 return Boost.findOne({ where: { userAddress: userAddress.toLowerCase() } });
+            }
+        });
+
+        t.list.field("boosts", {
+            type: "Boost",
+            resolve: () => {
+                return Boost.find();
             }
         });
     }

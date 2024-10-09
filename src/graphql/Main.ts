@@ -95,7 +95,7 @@ export const MainMutation = extendType({
       },
     });
 
-    t.field('updatePoints', {
+    t.field('addPoints', {
       type: 'Main',
       args: {
         userAddress: nonNull(stringArg()),
@@ -106,7 +106,7 @@ export const MainMutation = extendType({
         if (!main) {
           throw new Error('User not found');
         }
-        main.totalPoints = points;
+        main.totalPoints += points;
         return await main.save();
       },
     });

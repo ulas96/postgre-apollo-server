@@ -116,16 +116,17 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     addBonus: NexusGenRootTypes['Main'] | null; // Main
+    addPoints: NexusGenRootTypes['Main'] | null; // Main
     createBoost: NexusGenRootTypes['Boost']; // Boost!
     createMain: NexusGenRootTypes['Main'] | null; // Main
     createReferral: NexusGenRootTypes['Referral'] | null; // Referral
     updateDailyPoints: NexusGenRootTypes['Referral'] | null; // Referral
-    updatePoints: NexusGenRootTypes['Main'] | null; // Main
     updateReferral: NexusGenRootTypes['Referral'] | null; // Referral
     updateUserPoints: NexusGenRootTypes['Main'] | null; // Main
   }
   Query: { // field return type
     boost: NexusGenRootTypes['Boost'] | null; // Boost
+    boosts: Array<NexusGenRootTypes['Boost'] | null> | null; // [Boost]
     getAllUserAddresses: string[] | null; // [String!]
     referral: NexusGenRootTypes['Referral'] | null; // Referral
     referrals: NexusGenRootTypes['Referral'][]; // [Referral!]!
@@ -178,16 +179,17 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     addBonus: 'Main'
+    addPoints: 'Main'
     createBoost: 'Boost'
     createMain: 'Main'
     createReferral: 'Referral'
     updateDailyPoints: 'Referral'
-    updatePoints: 'Main'
     updateReferral: 'Referral'
     updateUserPoints: 'Main'
   }
   Query: { // field return type name
     boost: 'Boost'
+    boosts: 'Boost'
     getAllUserAddresses: 'String'
     referral: 'Referral'
     referrals: 'Referral'
@@ -209,6 +211,10 @@ export interface NexusGenFieldTypeNames {
 export interface NexusGenArgTypes {
   Mutation: {
     addBonus: { // args
+      points: number; // Float!
+      userAddress: string; // String!
+    }
+    addPoints: { // args
       points: number; // Float!
       userAddress: string; // String!
     }
@@ -248,10 +254,6 @@ export interface NexusGenArgTypes {
     updateDailyPoints: { // args
       dailyPoints: number; // Float!
       refereeAddress: string; // String!
-    }
-    updatePoints: { // args
-      points: number; // Float!
-      userAddress: string; // String!
     }
     updateReferral: { // args
       createdAt: string; // String!

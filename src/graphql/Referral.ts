@@ -89,7 +89,7 @@ export const ReferralMutation = extendType({
           throw new Error('Referral not found');
         }
         referral.dailyPoints = dailyPoints ?? 0;
-        referral.createdAt = createdAt ?? new Date("");
+        referral.createdAt = createdAt ?? referral.createdAt;
         return await referral.save();
       },
     });

@@ -28,15 +28,15 @@ export const MainQuery = extendType({
       args: {
         userAddress: nonNull(stringArg()),
       },
-      resolve: (_, { userAddress }) => {
-        return Main.findOne({ where: { userAddress: userAddress.toLowerCase() } })
+      resolve: async (_, { userAddress }) => {
+        return await Main.findOne({ where: { userAddress: userAddress.toLowerCase() } })
       },
     })
 
     t.list.field('users', {
       type: 'Main',
-      resolve: () => {
-        return Main.find()
+      resolve: async () => {
+        return await Main.find()
       },
     })
 
@@ -99,7 +99,7 @@ export const MainMutation = extendType({
       type: 'Main',
       args: {
         userAddress: nonNull(stringArg()),
-        points: nonNull(floatArg()),
+        points: floatArg(),
       },
       resolve: async (_, { userAddress, points }) => {
         const main = await Main.findOne({ where: { userAddress: userAddress.toLowerCase() } });

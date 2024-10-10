@@ -215,7 +215,7 @@ export interface NexusGenArgTypes {
       userAddress: string; // String!
     }
     addPoints: { // args
-      points: number; // Float!
+      points?: number | null; // Float
       userAddress: string; // String!
     }
     createBoost: { // args

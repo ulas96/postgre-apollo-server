@@ -1,7 +1,7 @@
 import { ApolloServer } from "apollo-server";
 import { schema } from "./schema";
 import typeormConfig from "./typeorm.config";
-import { Context } from "./types";
+import { Context } from "./types/Context";
 
 const boot = async () => {
 

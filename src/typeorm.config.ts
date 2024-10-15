@@ -1,15 +1,13 @@
 import { DataSource } from "typeorm";
 import dotenv from "dotenv";
-import { Boost } from "./entities/Boost";
-import { Main } from "./entities/Main";
-import { Referral } from "./entities/Referral";
-import { Ptp } from "./entities/Ptp";
+import { Feedback } from "./entities/Feedback";
+
 
 dotenv.config();
 
 export default new DataSource({
     type: "postgres",
     url: process.env.DATABASE_URL,
-    entities: [Boost, Main, Referral, Ptp],
+    entities: [Feedback],
     synchronize: true
 })

@@ -28,48 +28,15 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
-  Boost: { // root type
-    createdAt?: string | null; // String
-    firstCohort?: boolean | null; // Boolean
-    ptpCohort?: boolean | null; // Boolean
-    secondCohort?: boolean | null; // Boolean
-    sjFriend?: boolean | null; // Boolean
-    tasks75?: boolean | null; // Boolean
-    tasks100?: boolean | null; // Boolean
-    thirdCohort?: boolean | null; // Boolean
-    totalBonus?: number | null; // Int
-    userAddress: string; // String!
-  }
-  DailyPoints: { // root type
-    dailyPoints: number; // Float!
-    refereeAddress: string; // String!
-  }
-  Main: { // root type
-    bonus?: number | null; // Float
-    createdAt?: string | null; // String
-    firstEpochPoints?: number | null; // Float
-    holdAUSD?: number | null; // Float
-    holdXAVAX?: number | null; // Float
-    pangolin?: number | null; // Float
-    pharaoh?: number | null; // Float
-    rebPool?: number | null; // Float
-    referral?: string | null; // String
-    referralUsed?: string | null; // String
-    totalPoints?: number | null; // Float
-    traderJoe?: number | null; // Float
+  Feedback: { // root type
+    id: number; // Int!
+    q1?: string | null; // String
+    q2?: string | null; // String
+    q3?: string | null; // String
     userAddress: string; // String!
   }
   Mutation: {};
   Query: {};
-  Referees: { // root type
-    referees: string[]; // [String!]!
-  }
-  Referral: { // root type
-    createdAt: string; // String!
-    dailyPoints?: number | null; // Float
-    refereeAddress: string; // String!
-    referrerAddress: string; // String!
-  }
 }
 
 export interface NexusGenInterfaces {
@@ -83,205 +50,43 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
-  Boost: { // field return type
-    createdAt: string | null; // String
-    firstCohort: boolean | null; // Boolean
-    ptpCohort: boolean | null; // Boolean
-    secondCohort: boolean | null; // Boolean
-    sjFriend: boolean | null; // Boolean
-    tasks75: boolean | null; // Boolean
-    tasks100: boolean | null; // Boolean
-    thirdCohort: boolean | null; // Boolean
-    totalBonus: number | null; // Int
-    userAddress: string; // String!
-  }
-  DailyPoints: { // field return type
-    dailyPoints: number; // Float!
-    refereeAddress: string; // String!
-  }
-  Main: { // field return type
-    bonus: number | null; // Float
-    createdAt: string | null; // String
-    firstEpochPoints: number | null; // Float
-    holdAUSD: number | null; // Float
-    holdXAVAX: number | null; // Float
-    pangolin: number | null; // Float
-    pharaoh: number | null; // Float
-    rebPool: number | null; // Float
-    referral: string | null; // String
-    referralUsed: string | null; // String
-    totalPoints: number | null; // Float
-    traderJoe: number | null; // Float
+  Feedback: { // field return type
+    id: number; // Int!
+    q1: string | null; // String
+    q2: string | null; // String
+    q3: string | null; // String
     userAddress: string; // String!
   }
   Mutation: { // field return type
-    addBonus: NexusGenRootTypes['Main'] | null; // Main
-    addPoints: NexusGenRootTypes['Main'] | null; // Main
-    createBoost: NexusGenRootTypes['Boost']; // Boost!
-    createMain: NexusGenRootTypes['Main'] | null; // Main
-    createReferral: NexusGenRootTypes['Referral'] | null; // Referral
-    updateDailyPoints: NexusGenRootTypes['Referral'] | null; // Referral
-    updateReferral: NexusGenRootTypes['Referral'] | null; // Referral
-    updateUserPoints: NexusGenRootTypes['Main'] | null; // Main
+    createFeedback: NexusGenRootTypes['Feedback'] | null; // Feedback
   }
   Query: { // field return type
-    boost: NexusGenRootTypes['Boost'] | null; // Boost
-    boosts: Array<NexusGenRootTypes['Boost'] | null> | null; // [Boost]
-    getAllUserAddresses: string[] | null; // [String!]
-    referral: NexusGenRootTypes['Referral'] | null; // Referral
-    referrals: NexusGenRootTypes['Referral'][]; // [Referral!]!
-    referrerPoints: number | null; // Float
-    user: NexusGenRootTypes['Main'] | null; // Main
-    users: Array<NexusGenRootTypes['Main'] | null> | null; // [Main]
-  }
-  Referees: { // field return type
-    referees: string[]; // [String!]!
-  }
-  Referral: { // field return type
-    createdAt: string; // String!
-    dailyPoints: number | null; // Float
-    refereeAddress: string; // String!
-    referrerAddress: string; // String!
+    feedback: Array<NexusGenRootTypes['Feedback'] | null> | null; // [Feedback]
   }
 }
 
 export interface NexusGenFieldTypeNames {
-  Boost: { // field return type name
-    createdAt: 'String'
-    firstCohort: 'Boolean'
-    ptpCohort: 'Boolean'
-    secondCohort: 'Boolean'
-    sjFriend: 'Boolean'
-    tasks75: 'Boolean'
-    tasks100: 'Boolean'
-    thirdCohort: 'Boolean'
-    totalBonus: 'Int'
-    userAddress: 'String'
-  }
-  DailyPoints: { // field return type name
-    dailyPoints: 'Float'
-    refereeAddress: 'String'
-  }
-  Main: { // field return type name
-    bonus: 'Float'
-    createdAt: 'String'
-    firstEpochPoints: 'Float'
-    holdAUSD: 'Float'
-    holdXAVAX: 'Float'
-    pangolin: 'Float'
-    pharaoh: 'Float'
-    rebPool: 'Float'
-    referral: 'String'
-    referralUsed: 'String'
-    totalPoints: 'Float'
-    traderJoe: 'Float'
+  Feedback: { // field return type name
+    id: 'Int'
+    q1: 'String'
+    q2: 'String'
+    q3: 'String'
     userAddress: 'String'
   }
   Mutation: { // field return type name
-    addBonus: 'Main'
-    addPoints: 'Main'
-    createBoost: 'Boost'
-    createMain: 'Main'
-    createReferral: 'Referral'
-    updateDailyPoints: 'Referral'
-    updateReferral: 'Referral'
-    updateUserPoints: 'Main'
+    createFeedback: 'Feedback'
   }
   Query: { // field return type name
-    boost: 'Boost'
-    boosts: 'Boost'
-    getAllUserAddresses: 'String'
-    referral: 'Referral'
-    referrals: 'Referral'
-    referrerPoints: 'Float'
-    user: 'Main'
-    users: 'Main'
-  }
-  Referees: { // field return type name
-    referees: 'String'
-  }
-  Referral: { // field return type name
-    createdAt: 'String'
-    dailyPoints: 'Float'
-    refereeAddress: 'String'
-    referrerAddress: 'String'
+    feedback: 'Feedback'
   }
 }
 
 export interface NexusGenArgTypes {
   Mutation: {
-    addBonus: { // args
-      points: number; // Float!
-      userAddress: string; // String!
-    }
-    addPoints: { // args
-      points?: number | null; // Float
-      userAddress: string; // String!
-    }
-    createBoost: { // args
-      createdAt?: string | null; // String
-      firstCohort?: boolean | null; // Boolean
-      ptpCohort?: boolean | null; // Boolean
-      secondCohort?: boolean | null; // Boolean
-      sjFriend?: boolean | null; // Boolean
-      tasks75?: boolean | null; // Boolean
-      tasks100?: boolean | null; // Boolean
-      thirdCohort?: boolean | null; // Boolean
-      totalBonus?: number | null; // Int
-      userAddress: string; // String!
-    }
-    createMain: { // args
-      bonus?: number | null; // Float
-      createdAt?: string | null; // String
-      firstEpochPoints?: number | null; // Float
-      holdAUSD?: number | null; // Float
-      holdXAVAX?: number | null; // Float
-      pangolin?: number | null; // Float
-      pharaoh?: number | null; // Float
-      rebPool?: number | null; // Float
-      referral?: string | null; // String
-      referralUsed?: string | null; // String
-      totalPoints?: number | null; // Float
-      traderJoe?: number | null; // Float
-      userAddress: string; // String!
-    }
-    createReferral: { // args
-      createdAt: string; // String!
-      dailyPoints?: number | null; // Float
-      refereeAddress: string; // String!
-      referrerAddress: string; // String!
-    }
-    updateDailyPoints: { // args
-      dailyPoints: number; // Float!
-      refereeAddress: string; // String!
-    }
-    updateReferral: { // args
-      createdAt: string; // String!
-      dailyPoints?: number | null; // Float
-      refereeAddress: string; // String!
-    }
-    updateUserPoints: { // args
-      holdAUSD?: number | null; // Float
-      holdXAVAX?: number | null; // Float
-      pangolin?: number | null; // Float
-      pharaoh?: number | null; // Float
-      rebPool?: number | null; // Float
-      totalPoints?: number | null; // Float
-      traderJoe?: number | null; // Float
-      userAddress: string; // String!
-    }
-  }
-  Query: {
-    boost: { // args
-      userAddress: string; // String!
-    }
-    referral: { // args
-      refereeAddress: string; // String!
-    }
-    referrerPoints: { // args
-      referrerAddress: string; // String!
-    }
-    user: { // args
+    createFeedback: { // args
+      q1?: number | null; // Float
+      q2?: number | null; // Float
+      q3?: number | null; // Float
       userAddress: string; // String!
     }
   }

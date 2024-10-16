@@ -31,6 +31,7 @@ type Main {
   rebPool: Float
   referral: String
   referralUsed: String
+  secondEpochPoints: Float
   totalPoints: Float
   traderJoe: Float
   userAddress: String!
@@ -40,7 +41,7 @@ type Mutation {
   addBonus(points: Float!, userAddress: String!): Main
   addPoints(points: Float, userAddress: String!): Main
   createBoost(createdAt: String, firstCohort: Boolean, ptpCohort: Boolean, secondCohort: Boolean, sjFriend: Boolean, tasks75: Boolean, tasks100: Boolean, thirdCohort: Boolean, totalBonus: Int, userAddress: String!): Boost!
-  createMain(bonus: Float, createdAt: String, firstEpochPoints: Float, holdAUSD: Float, holdXAVAX: Float, pangolin: Float, pharaoh: Float, rebPool: Float, referral: String, referralUsed: String, totalPoints: Float, traderJoe: Float, userAddress: String!): Main
+  createMain(bonus: Float, createdAt: String, firstEpochPoints: Float, holdAUSD: Float, holdXAVAX: Float, pangolin: Float, pharaoh: Float, rebPool: Float, referral: String, referralUsed: String, secondEpochPoints: Float, totalPoints: Float, traderJoe: Float, userAddress: String!): Main
   createReferral(createdAt: String!, dailyPoints: Float, refereeAddress: String!, referrerAddress: String!): Referral
   updateDailyPoints(dailyPoints: Float!, refereeAddress: String!): Referral
   updateReferral(createdAt: String!, dailyPoints: Float, refereeAddress: String!): Referral

@@ -55,6 +55,7 @@ export interface NexusGenObjects {
     rebPool?: number | null; // Float
     referral?: string | null; // String
     referralUsed?: string | null; // String
+    secondEpochPoints?: number | null; // Float
     totalPoints?: number | null; // Float
     traderJoe?: number | null; // Float
     userAddress: string; // String!
@@ -110,6 +111,7 @@ export interface NexusGenFieldTypes {
     rebPool: number | null; // Float
     referral: string | null; // String
     referralUsed: string | null; // String
+    secondEpochPoints: number | null; // Float
     totalPoints: number | null; // Float
     traderJoe: number | null; // Float
     userAddress: string; // String!
@@ -173,6 +175,7 @@ export interface NexusGenFieldTypeNames {
     rebPool: 'Float'
     referral: 'String'
     referralUsed: 'String'
+    secondEpochPoints: 'Float'
     totalPoints: 'Float'
     traderJoe: 'Float'
     userAddress: 'String'
@@ -241,6 +244,7 @@ export interface NexusGenArgTypes {
       rebPool?: number | null; // Float
       referral?: string | null; // String
       referralUsed?: string | null; // String
+      secondEpochPoints?: number | null; // Float
       totalPoints?: number | null; // Float
       traderJoe?: number | null; // Float
       userAddress: string; // String!

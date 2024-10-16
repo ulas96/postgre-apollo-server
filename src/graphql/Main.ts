@@ -17,6 +17,7 @@ export const MainType = objectType({
     t.string('referralUsed')
     t.string('createdAt')
     t.float('firstEpochPoints')
+    t.float('secondEpochPoints')
   },
 })
 
@@ -71,9 +72,10 @@ export const MainMutation = extendType({
         referralUsed: stringArg(),
         createdAt: stringArg(),
         firstEpochPoints: floatArg(),
+        secondEpochPoints: floatArg()
       },
-      resolve: async(_, { userAddress, totalPoints, rebPool, holdAUSD, holdXAVAX, traderJoe, pharaoh, pangolin, bonus, referral, referralUsed, createdAt, firstEpochPoints }) => {
-        return await Main.create({ userAddress: userAddress.toLowerCase(), totalPoints, rebPool, holdAUSD, holdXAVAX, traderJoe, pharaoh, pangolin, bonus, referral, referralUsed, createdAt, firstEpochPoints }).save();
+      resolve: async(_, { userAddress, totalPoints, rebPool, holdAUSD, holdXAVAX, traderJoe, pharaoh, pangolin, bonus, referral, referralUsed, createdAt, firstEpochPoints, secondEpochPoints }) => {
+        return await Main.create({ userAddress: userAddress.toLowerCase(), totalPoints, rebPool, holdAUSD, holdXAVAX, traderJoe, pharaoh, pangolin, bonus, referral, referralUsed, createdAt, firstEpochPoints, secondEpochPoints }).save();
       },
     });
 

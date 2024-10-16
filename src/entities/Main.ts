@@ -41,4 +41,7 @@ export class Main extends BaseEntity {
 
     @Column()
     firstEpochPoints: number;
+
+    @Column()
+    secondEpochPoints: number;
 }

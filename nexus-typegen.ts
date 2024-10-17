@@ -218,7 +218,12 @@ export interface NexusGenArgTypes {
       userAddress: string; // String!
     }
     addPoints: { // args
-      points?: number | null; // Float
+      holdAUSD?: number | null; // Float
+      holdXAVAX?: number | null; // Float
+      pangolin?: number | null; // Float
+      pharaoh?: number | null; // Float
+      totalPoints?: number | null; // Float
+      traderJoe?: number | null; // Float
       userAddress: string; // String!
     }
     createBoost: { // args

@@ -101,14 +101,26 @@ export const MainMutation = extendType({
       type: 'Main',
       args: {
         userAddress: nonNull(stringArg()),
-        points: floatArg(),
+        totalPoints: floatArg(),
+        holdAUSD: floatArg(),
+        holdXAVAX: floatArg(),
+        traderJoe: floatArg(),
+        pharaoh: floatArg(),
+        pangolin: floatArg()
       },
-      resolve: async (_, { userAddress, points }) => {
+      resolve: async (_, { userAddress, totalPoints, holdAUSD, holdXAVAX,  traderJoe, pharaoh, pangolin }) => {
         const main = await Main.findOne({ where: { userAddress: userAddress.toLowerCase() } });
         if (!main) {
           throw new Error('User not found');
         }
-        main.totalPoints += points;
+        
+        main.totalPoints += totalPoints;
+        main.holdAUSD += holdAUSD;
+        main.holdXAVAX += holdXAVAX;
+        main.traderJoe += traderJoe;
+        main.pharaoh += pharaoh;
+        main.pangolin += pangolin;
+
         return await main.save();
       },
     });
@@ -130,13 +142,13 @@ export const MainMutation = extendType({
         if (!main) {
           throw new Error('User not found');
         }
-        main.totalPoints = totalPoints;
         main.rebPool = rebPool;
         main.holdAUSD = holdAUSD;
         main.holdXAVAX = holdXAVAX;
         main.traderJoe = traderJoe;
         main.pharaoh = pharaoh;
         main.pangolin = pangolin;
+        main.totalPoints = totalPoints;
         return await main.save();
       },
     });

@@ -222,6 +222,7 @@ export interface NexusGenArgTypes {
       holdXAVAX?: number | null; // Float
       pangolin?: number | null; // Float
       pharaoh?: number | null; // Float
+      rebPool?: number | null; // Float
       totalPoints?: number | null; // Float
       traderJoe?: number | null; // Float
       userAddress: string; // String!
@@ -272,7 +273,6 @@ export interface NexusGenArgTypes {
     updateUserPoints: { // args
       holdAUSD?: number | null; // Float
       holdXAVAX?: number | null; // Float
-      pangolin?: number | null; // Float
       pharaoh?: number | null; // Float
       rebPool?: number | null; // Float
       totalPoints?: number | null; // Float

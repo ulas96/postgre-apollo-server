@@ -37,10 +37,13 @@ export const MainQuery = extendType({
     t.list.field('users', {
       type: 'Main',
       resolve: async () => {
-        return await Main.find()
+        return await Main.find({
+          order: {
+            totalPoints: 'DESC'
+          }
+        })
       },
     })
-
 
     t.list.nonNull.string('getAllUserAddresses', {
       resolve: async () => {

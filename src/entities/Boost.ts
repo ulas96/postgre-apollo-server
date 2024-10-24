@@ -12,7 +12,7 @@ export class Boost extends BaseEntity {
     @Column()
     ptpCohort: boolean;
   
-    @Column()
+    @Column('numeric', { precision: 18, scale: 0, default: 0 })
     totalBonus: number;
   
     @Column()

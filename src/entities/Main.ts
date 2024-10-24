@@ -1,47 +1,46 @@
 import { BaseEntity, Entity, PrimaryColumn, Column, CreateDateColumn } from "typeorm";
 
 @Entity()
-
 export class Main extends BaseEntity {
     @PrimaryColumn()
     userAddress!: string;
   
-    @Column()
+    @Column('numeric', { precision: 18, scale: 0, default: 0 })
     totalPoints: number;
   
-    @Column()
+    @Column('numeric', { precision: 18, scale: 0, default: 0 })
     rebPool: number;
   
-    @Column()
+    @Column('numeric', { precision: 18, scale: 0, default: 0 })
     holdAUSD: number;
 
-    @Column()
+    @Column('numeric', { precision: 18, scale: 0, default: 0 })
     holdXAVAX: number;
   
-    @Column()
+    @Column('numeric', { precision: 18, scale: 0, default: 0 })
     traderJoe: number;
   
-    @Column()
+    @Column('numeric', { precision: 18, scale: 0, default: 0 })
     pharaoh: number;
 
-    @Column()
+    @Column('numeric', { precision: 18, scale: 0, default: 0 })
     pangolin: number;
   
-    @Column()
+    @Column('numeric', { precision: 18, scale: 0, default: 0 })
     bonus: number;
 
-    @Column()
+    @Column({ nullable: true })
     referral: string;
 
-    @Column()
+    @Column({ nullable: true })
     referralUsed: string;
 
     @CreateDateColumn({ type: "timestamp" })
     createdAt: Date;
 
-    @Column()
+    @Column('numeric', { precision: 18, scale: 0, default: 0 })
     firstEpochPoints: number;
 
-    @Column()
+    @Column('numeric', { precision: 18, scale: 0, default: 0 })
     secondEpochPoints: number;
 }

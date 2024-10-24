@@ -9,7 +9,7 @@ export class Referral extends BaseEntity {
     @Column()
     referrerAddress!: string;
 
-    @Column()
+    @Column('numeric', { precision: 18, scale: 0, default: 0 })
     dailyPoints: number;
 
     @CreateDateColumn({ type: "timestamp" })

@@ -93,8 +93,8 @@ export const MainMutation = extendType({
         if (!main) {
           throw new Error('User not found');
         }
-        main.bonus += points;
-        main.totalPoints += points;
+        main.bonus = Number(main.bonus) + Number(points);
+        main.totalPoints = Number(main.totalPoints) + Number(points);
         await main.save();
         return main;
       },
